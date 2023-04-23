@@ -1,0 +1,42 @@
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
+import path from "path";
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [vue({
+    template: { transformAssetUrls }
+  }),
+  quasar({
+    sassVariables: 'src/quasar-variables.sass'
+  })
+],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src')
+    }
+  },
+  build: {
+    // phaser doesn't accept inlined assets
+    assetsInlineLimit: 0
+  }
+})
+
+//import { defineConfig } from 'vite'
+//import vue from '@vitejs/plugin-vue'
+
+
+// https://vitejs.dev/config/
+/*
+export default defineConfig({
+  plugins: [
+    vue({
+      template: { transformAssetUrls }
+    }),
+
+    quasar({
+      sassVariables: 'src/quasar-variables.sass'
+    })
+  ]
+})*/
