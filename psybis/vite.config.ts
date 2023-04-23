@@ -5,6 +5,7 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // se pune asta aici daca vrei sa adage la asseturi o cale deg dist--> base:'/dist/',
   plugins: [vue({
     template: { transformAssetUrls }
   }),
