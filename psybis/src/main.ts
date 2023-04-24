@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import router from './router'
 
 //createApp(App).mount('#app')
 
@@ -42,6 +43,6 @@ myApp.use(Quasar, {
   }
   */
 })
-
+myApp.use(router)
 // Assumes you have a <div id="app"></div> in your index.html
 myApp.mount('#app')
