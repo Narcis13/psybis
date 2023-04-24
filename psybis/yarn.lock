@@ -7,10 +7,10 @@
   resolved "https://registry.npmjs.org/@babel/parser/-/parser-7.19.0.tgz"
   integrity sha512-74bEXKX2h+8rrfQUfsBfuZZHzsEs6Eql4pqy/T4Nn6Y9wNPggQOqD6z6pn5Bl8ZfysKouFZT/UXEH94ummEeQw==
 
-"@esbuild/darwin-x64@0.17.16":
+"@esbuild/darwin-arm64@0.17.16":
   version "0.17.16"
-  resolved "https://registry.npmjs.org/@esbuild/darwin-x64/-/darwin-x64-0.17.16.tgz"
-  integrity sha512-SzBQtCV3Pdc9kyizh36Ol+dNVhkDyIrGb/JXZqFq8WL37LIyrXU0gUpADcNV311sCOhvY+f2ivMhb5Tuv8nMOQ==
+  resolved "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.17.16.tgz"
+  integrity sha512-/Ofw8UXZxuzTLsNFmz1+lmarQI6ztMZ9XktvXedTbt3SNWDn0+ODTwxExLYQ/Hod91EZB4vZPQJLoqLF0jvEzA==
 
 "@quasar/extras@^1.16.2":
   version "1.16.2"
@@ -118,7 +118,7 @@
     "@vue/compiler-dom" "3.2.47"
     "@vue/shared" "3.2.47"
 
-"@vue/devtools-api@^6.4.5":
+"@vue/devtools-api@^6.4.5", "@vue/devtools-api@^6.5.0":
   version "6.5.0"
   resolved "https://registry.npmjs.org/@vue/devtools-api/-/devtools-api-6.5.0.tgz"
   integrity sha512-o9KfBeaBmCKl10usN4crU53fYtC1r7jJwdGKjPT24t348rHxgfpZ0xL3Xm/gLUYnc0oTp8LAmrxOeLyu6tbk2Q==
@@ -436,6 +436,14 @@ picomatch@^2.0.4, picomatch@^2.2.1:
   resolved "https://registry.npmjs.org/picomatch/-/picomatch-2.3.1.tgz"
   integrity sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==
 
+pinia@^2.0.35:
+  version "2.0.35"
+  resolved "https://registry.npmjs.org/pinia/-/pinia-2.0.35.tgz"
+  integrity sha512-P1IKKQWhxGXiiZ3atOaNI75bYlFUbRxtJdhPLX059Z7+b9Z04rnTZdSY8Aph1LA+/4QEMAYHsTQ638Wfe+6K5g==
+  dependencies:
+    "@vue/devtools-api" "^6.5.0"
+    vue-demi "*"
+
 postcss-value-parser@^4.2.0:
   version "4.2.0"
   resolved "https://registry.npmjs.org/postcss-value-parser/-/postcss-value-parser-4.2.0.tgz"
@@ -512,7 +520,7 @@ to-regex-range@^5.0.1:
   dependencies:
     is-number "^7.0.0"
 
-typescript@*, typescript@^5.0.4:
+typescript@*, typescript@^5.0.4, typescript@>=4.4.4:
   version "5.0.4"
   resolved "https://registry.npmjs.org/typescript/-/typescript-5.0.4.tgz"
   integrity sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==
@@ -537,6 +545,11 @@ update-browserslist-db@^1.0.10:
   optionalDependencies:
     fsevents "~2.3.2"
 
+vue-demi@*:
+  version "0.14.0"
+  resolved "https://registry.npmjs.org/vue-demi/-/vue-demi-0.14.0.tgz"
+  integrity sha512-gt58r2ogsNQeVoQ3EhoUAvUsH9xviydl0dWJj7dabBC/2L4uBId7ujtCwDRD0JhkGsV1i0CtfLAeyYKBht9oWg==
+
 vue-router@^4.1.6:
   version "4.1.6"
   resolved "https://registry.npmjs.org/vue-router/-/vue-router-4.1.6.tgz"
@@ -560,7 +573,7 @@ vue-tsc@^1.2.0:
     "@volar/vue-language-core" "1.2.0"
     "@volar/vue-typescript" "1.2.0"
 
-vue@^3.0.0, vue@^3.2.0, vue@^3.2.25, vue@^3.2.47, vue@3.2.47:
+"vue@^2.6.14 || ^3.2.0", vue@^3.0.0, "vue@^3.0.0-0 || ^2.6.0", vue@^3.2.0, vue@^3.2.25, vue@^3.2.47, vue@3.2.47:
   version "3.2.47"
   resolved "https://registry.npmjs.org/vue/-/vue-3.2.47.tgz"
   integrity sha512-60188y/9Dc9WVrAZeUVSDxRQOZ+z+y5nO2ts9jWXSTkMvayiWxCWOWtBQoYjLeccfXkiiPZWAHcV+WTPhkqJHQ==

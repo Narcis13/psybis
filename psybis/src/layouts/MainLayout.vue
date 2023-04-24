@@ -6,10 +6,10 @@
           <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
   
           <q-toolbar-title>
-            <q-avatar>
+            <q-avatar class="q-mr-md">
               <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
             </q-avatar>
-            Title
+            PSYBIS Management App
           </q-toolbar-title>
         </q-toolbar>
       </q-header>
@@ -28,7 +28,7 @@
             <q-avatar>
               <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
             </q-avatar>
-            <div>Title</div>
+            <div>PSYBIS Management App</div>
           </q-toolbar-title>
         </q-toolbar>
       </q-footer>
@@ -38,11 +38,14 @@
   
   <script>
   import { ref } from 'vue'
-  
+  import {useUtilizatorStore} from '../stores/StoreUtilizator'
   export default {
     setup () {
       const leftDrawerOpen = ref(false)
-  
+      const UtilizatorStore = useUtilizatorStore()
+      console.log(UtilizatorStore.rol)
+
+      
       return {
         leftDrawerOpen,
         toggleLeftDrawer () {
