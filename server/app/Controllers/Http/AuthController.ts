@@ -1,6 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import {rules , schema} from '@ioc:Adonis/Core/Validator'
-import user from 'App/Models/User';
+import User from 'App/Models/User';
 
 export default class AuthController {
 
@@ -23,16 +23,52 @@ export default class AuthController {
         try {
             const utilizator_validat = await request.validate({schema:validare_user});
     
-            const utilizator = await user.create(utilizator_validat);
+            const utilizator = await User.create(utilizator_validat);
         
             return utilizator;
           } catch (error) {
-            response.send({errors:error.messages})
+              response.send({errors:error.messages})
           }
     
     
     
     
        }
+
+       public async login({auth,request}:HttpContextContract){
+        const {nume,password} = request.all()
+     
+   
+           // await auth.attempt(nume,password)
+           
+       
+    
+          // console.log(numeunic,password,slug,idclinica)
+           try {
+             const token = await auth.use('api').attempt(nume, password,{
+               expiresIn: '960 mins'
+             })
+             
+             const loggeduser = await User.findBy('nume',nume)// aici trebuie sa ma intreb de stare ......
+             if(loggeduser&&loggeduser.stare=="activ")
+             return {loggeduser,token}
+             else
+               return 'Utilizatorul nu a putut fi autentificat!'
+           }
+           catch (error) {
+               return error;
+           }
+ 
+            //return token
+ 
+         
+       
+    }
+ 
+    public async logout({ auth }:HttpContextContract){
+    
+         await auth.use('api').logout()
+         return "Logged out!"
+    }
 
 }

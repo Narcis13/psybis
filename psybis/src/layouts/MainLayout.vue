@@ -11,6 +11,20 @@
             </q-avatar>
             PSYBIS Management App
           </q-toolbar-title>
+
+          <q-spacer />
+          
+          <q-btn push color="primary" label="Handles click">
+              <q-popup-proxy>
+                <q-banner>
+                  <template v-slot:avatar>
+                    <q-icon name="signal_wifi_off" color="primary" />
+                  </template>
+                  You have lost connection to the internet. This app is offline.
+                </q-banner>
+              </q-popup-proxy>
+           </q-btn>
+
         </q-toolbar>
       </q-header>
   
@@ -25,9 +39,7 @@
       <q-footer elevated class="bg-grey-8 text-white">
         <q-toolbar>
           <q-toolbar-title>
-            <q-avatar>
-              <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
-            </q-avatar>
+      
             <div>PSYBIS Management App</div>
           </q-toolbar-title>
         </q-toolbar>

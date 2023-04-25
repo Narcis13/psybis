@@ -15,8 +15,8 @@ export default class User extends BaseModel {
   @column()
   public numeintreg: string
 
-  @column()
-  public numeunic: string
+  /*@column()
+  public numeunic: string*/
 
   @column()
   public rol: string
@@ -26,6 +26,9 @@ export default class User extends BaseModel {
 
   @column()
   public rememberMeToken: string | null
+
+  @column()
+  public stare: string | null
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
