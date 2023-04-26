@@ -6,7 +6,7 @@ import router from './router'
 //createApp(App).mount('#app')
 
 //import { createApp } from 'vue'
-import { Quasar } from 'quasar'
+import { Quasar , Notify} from 'quasar'
 
 // Import icon libraries
 import '@quasar/extras/roboto-font-latin-ext/roboto-font-latin-ext.css'
@@ -30,7 +30,7 @@ import 'quasar/src/css/index.sass'
 const myApp = createApp(App)
 
 myApp.use(Quasar, {
-  plugins: {}, // import Quasar plugins and add here
+  plugins: {Notify}, // import Quasar plugins and add here
   /*
   config: {
     brand: {

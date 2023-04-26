@@ -14,12 +14,17 @@
 
           <q-space />
           
-          <q-btn push outline rounded color="white" label="Autentificare" >
+          <q-btn push outline rounded color="white" :label="UtilizatorStore.autentificat?'Deconectare':'Autentificare'" >
               <q-popup-proxy>
               <div class="column items-center q-pa-lg">
-                <q-input standout class="q-mt-md"  v-model="nume" label="Nume" />
-                <q-input standout class="q-mt-md" v-model="password" type="password" label="Parola" />
-                <q-btn v-close-popup class="glossy q-ma-md col" rounded color="primary" icon="local_activity" label="LOGIN" @click="autentificare"/>
+                <q-input v-show="!UtilizatorStore.autentificat" standout="bg-teal text-white" class="q-mt-md"  v-model="nume" label="Nume" />
+                <q-input v-show="!UtilizatorStore.autentificat"  standout="bg-teal text-white" class="q-mt-md" v-model="password" type="password" label="Parola" />
+                <q-btn v-show="!UtilizatorStore.autentificat"  v-close-popup class="glossy q-ma-md col" rounded color="primary" icon="local_activity" label="LOGIN" @click="autentificare"/>
+
+                <q-card class="col  q-mt-md" v-if="UtilizatorStore.autentificat">
+                
+                
+                </q-card>
               </div>
               </q-popup-proxy>
            </q-btn>
@@ -49,19 +54,60 @@
   
   <script>
   import { ref } from 'vue'
+  import axios from 'axios'
+  import { useQuasar } from 'quasar'
   import {useUtilizatorStore} from '../stores/StoreUtilizator'
   export default {
     setup () {
       const leftDrawerOpen = ref(false)
       const UtilizatorStore = useUtilizatorStore()
-    
+      const $q = useQuasar()
       const nume=ref("")
       const password=ref("")
-      console.log(UtilizatorStore.rol)
-
+      console.log(UtilizatorStore.rol,$q)
+      const host=import.meta.env.VITE_HOST
       const autentificare = ()=>{
-        console.log(nume.value)
-        UtilizatorStore.autentificare(nume.value,password.value)
+        //console.log(nume.value)
+        //UtilizatorStore.autentificare(nume.value,password.value)
+
+        axios.post(host+'login',{nume:nume.value,password:password.value}).then(
+                      res => {
+                        console.log('Raspuns la autentificare ',res.data)
+                        nume.value=''
+                        password.value=''
+                        if(res.data.loggeduser){
+                         $q.notify({
+                                  message:'Utilizator autentificat cu succes!',
+                                  timeout:2000,
+                                  position:'top',
+                                  color:'positive'
+                                }) 
+                                UtilizatorStore.autentificare(res.data.loggeduser,res.data.token)
+                  
+                        }
+                        else
+                        {
+                          $q.notify({
+                                  message:'Autentificare nereusita!',
+                                  timeout:3000,
+                                  position:'top',
+                                  color:'negative'
+                                }) 
+                        }
+
+                      }
+              ).catch(err=>{
+                nume.value=''
+                password.value=''
+                    $q.notify({
+                              color: 'negative',
+                              timeout:1500,
+                              position:'top',
+                              icon: 'delete',
+                              message: `User sau parola incorecte...`
+                            })
+              console.log('Eroare autentificare',err);
+              });
       }
 
       return {
@@ -69,6 +115,7 @@
         nume,
         password,
         autentificare,
+        UtilizatorStore,
         toggleLeftDrawer () {
           leftDrawerOpen.value = !leftDrawerOpen.value
         }
