@@ -5,6 +5,11 @@ export const useUtilizatorStore = defineStore('utilizatorCurentStore',{
         nume:'',
         rol:'admin',
         token:''
-    })
+    }),
+    actions:{
+        autentificare(nume,password){
+            console.log('Tentativa de autentificare(store pinia)',nume,password)
+        }
+    }
 
 })

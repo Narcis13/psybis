@@ -12,16 +12,15 @@
             PSYBIS Management App
           </q-toolbar-title>
 
-          <q-spacer />
+          <q-space />
           
-          <q-btn push color="primary" label="Handles click">
+          <q-btn push outline rounded color="white" label="Autentificare" >
               <q-popup-proxy>
-                <q-banner>
-                  <template v-slot:avatar>
-                    <q-icon name="signal_wifi_off" color="primary" />
-                  </template>
-                  You have lost connection to the internet. This app is offline.
-                </q-banner>
+              <div class="column items-center q-pa-lg">
+                <q-input standout class="q-mt-md"  v-model="nume" label="Nume" />
+                <q-input standout class="q-mt-md" v-model="password" type="password" label="Parola" />
+                <q-btn v-close-popup class="glossy q-ma-md col" rounded color="primary" icon="local_activity" label="LOGIN" @click="autentificare"/>
+              </div>
               </q-popup-proxy>
            </q-btn>
 
@@ -55,11 +54,21 @@
     setup () {
       const leftDrawerOpen = ref(false)
       const UtilizatorStore = useUtilizatorStore()
+    
+      const nume=ref("")
+      const password=ref("")
       console.log(UtilizatorStore.rol)
 
-      
+      const autentificare = ()=>{
+        console.log(nume.value)
+        UtilizatorStore.autentificare(nume.value,password.value)
+      }
+
       return {
         leftDrawerOpen,
+        nume,
+        password,
+        autentificare,
         toggleLeftDrawer () {
           leftDrawerOpen.value = !leftDrawerOpen.value
         }
