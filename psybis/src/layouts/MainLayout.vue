@@ -22,7 +22,29 @@
                 <q-btn v-show="!UtilizatorStore.autentificat"  v-close-popup class="glossy q-ma-md col" rounded color="primary" icon="local_activity" label="LOGIN" @click="autentificare"/>
 
                 <q-card class="col  q-mt-md" v-if="UtilizatorStore.autentificat">
-                
+                  <q-card-section>
+                  <q-item>
+            
+                        <q-item-section avatar>
+                          <q-avatar size="70px" font-size="52px" color="deep-purple-14" text-color="white" icon="account_box" />
+                        </q-item-section>
+
+                        <q-item-section>
+                          <q-item-label  class="text-blue-grey-10 text-subtitle2">{{UtilizatorStore.rol}}</q-item-label>
+                          <q-item-label  class="text-blue-grey-10 text-subtitle2">{{UtilizatorStore.numeintreg}}</q-item-label>
+                        </q-item-section>
+                      </q-item>
+            
+                    </q-card-section>
+                    <q-separator />
+
+                    <q-card-actions class="q-pa-sm" vertical >
+                      <div class="flex flex-center">
+                        <q-btn v-close-popup align="around" class="q-pa-sm" color="deep-purple-14" text-color="pink-1" icon="logout" :to="'/'"  @click="UtilizatorStore.deconectare">Deconectare!</q-btn>
+                      </div>
+   
+
+                    </q-card-actions>
                 
                 </q-card>
               </div>
