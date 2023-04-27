@@ -40,7 +40,7 @@
 
                     <q-card-actions class="q-pa-sm" vertical >
                       <div class="flex flex-center">
-                        <q-btn v-close-popup align="around" class="q-pa-sm" color="deep-purple-14" text-color="pink-1" icon="logout" :to="'/'"  @click="UtilizatorStore.deconectare">Deconectare!</q-btn>
+                        <q-btn v-close-popup align="around" class="q-pa-sm" color="deep-purple-14" text-color="pink-1" icon="logout"   @click="UtilizatorStore.deconectare">Deconectare!</q-btn>
                       </div>
    
 
@@ -56,6 +56,9 @@
   
       <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
         <!-- drawer content -->
+        <div class="column items-center">
+          <Meniu v-show="UtilizatorStore.autentificat" />
+        </div>
       </q-drawer>
   
       <q-page-container>
@@ -75,11 +78,17 @@
   </template>
   
   <script>
-  import { ref } from 'vue'
+  import { ref , defineComponent} from 'vue'
   import axios from 'axios'
   import { useQuasar } from 'quasar'
   import {useUtilizatorStore} from '../stores/StoreUtilizator'
-  export default {
+  import Meniu from '../components/Meniu.vue'
+  export default defineComponent({
+  name: 'MainLayout',
+
+  components: {
+    Meniu
+  },
     setup () {
       const leftDrawerOpen = ref(false)
       const UtilizatorStore = useUtilizatorStore()
@@ -144,4 +153,5 @@
       }
     }
   }
+)
   </script>
