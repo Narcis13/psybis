@@ -10,39 +10,40 @@
                     
                         group="somegroup"
                         icon="settings"
-                        label="CONFIGURARE"
+                        label="RECEPTIE"
                         default-opened
                         header-class="text-primary"
                     >
                         <q-card>
                         <q-card-section>
                             <q-btn to="orarcab777" class="full-width q-ma-xs" color="indigo"  no-caps>
-                                Orar <br> Cabinete
+                                Receptie <br> Candidati
                             </q-btn>
                             <q-btn to="indi13" class="full-width q-ma-xs" color="indigo"  no-caps>
-                                Indisponibilitati<br>Medici
+                                Alocare<br>Teste
                             </q-btn>
-                            <q-btn to="libere638" class="full-width q-ma-xs" color="indigo"  no-caps>
-                                Zile libere<br>Sarbatori legale
-                            </q-btn>
+              
                         </q-card-section>
                         </q-card>
                     </q-expansion-item>
 
                     <q-separator />
 
-                    <q-expansion-item  group="somegroup" icon="edit_calendar" label="PROGRAMARI" header-class="text-teal">
+                    <q-expansion-item  group="somegroup" icon="edit_calendar" label="CONFIGURARE" header-class="text-teal">
                         <q-card>
                         <q-card-section>
 
                             <q-btn to="adminpro" class="full-width q-ma-xs" color="teal" no-caps>
-                                Administrare<br>Programari
+                                Utilizatori
                             </q-btn>
                             <q-btn to="rappro" class="full-width q-ma-xs" color="teal" no-caps>
-                                Raport<br>Programari
+                                Statii<br>lucru
                             </q-btn>
                             <q-btn to="soli456" class="full-width q-ma-xs" color="teal" no-caps>
-                                Solicitari<br>Programare
+                                Baterii<br>teste
+                            </q-btn>
+                            <q-btn to="soli456" class="full-width q-ma-xs" color="teal" no-caps>
+                                Nomenclatoare<br>Liste
                             </q-btn>
 
                         </q-card-section>
@@ -51,27 +52,22 @@
 
                     <q-separator />
 
-                    <q-expansion-item  group="somegroup" icon="rule" label="ADMINISTRARE" header-class="text-purple">
+                    <q-expansion-item  group="somegroup" icon="rule" label="ANALIZA & RAPOARTE" header-class="text-purple">
                         <q-card>
                         <q-card-section>
                             <q-btn to="clin777" class="full-width q-ma-xs" color="purple" no-caps>
-                                Clinica
+                                Candidati in perioada
                             </q-btn>
                             <q-btn  to="u852" class="full-width q-ma-xs" color="purple" no-caps>
-                                Utilizatori
+                                Evaluare multidimensionala
                             </q-btn>
                             <q-btn  to="sp987" class="full-width q-ma-xs" color="purple" no-caps>
-                                Specialitati
+                                Rezultate
                             </q-btn>
                             <q-btn  to="ser369" class="full-width q-ma-xs" color="purple" no-caps>
-                                Servicii
+                                Aviz psihologic
                             </q-btn>
-                            <q-btn  to="med1313" class="full-width q-ma-xs" color="purple" no-caps>
-                                Medici
-                            </q-btn>
-                            <q-btn  to="cab999" class="full-width q-ma-xs" color="purple" no-caps>
-                                Cabinete
-                            </q-btn>
+          
 
                         </q-card-section>
                         </q-card>
@@ -79,19 +75,17 @@
 
                     <q-separator />
 
-                    <q-expansion-item  group="somegroup" icon="settings" label="SUPERADMIN" header-class="text-grey-9">
+                    <q-expansion-item  group="somegroup" icon="settings" label="STUDIO" header-class="text-grey-9">
                         <q-card>
                         <q-card-section>
 
                             <q-btn  class="full-width q-ma-xs" to="clinici111" color="grey-9" no-caps>
-                            Clinici
+                            Import <br> Imagini & Sunete
                             </q-btn>
                             <q-btn class="full-width q-ma-xs" color="grey-9" no-caps>
-                                Clienti
+                                Conceptie <br> Baterii teste
                             </q-btn>
-                            <q-btn  class="full-width q-ma-xs" color="grey-9" no-caps>
-                                Statistici
-                            </q-btn>
+               
 
                         </q-card-section>
                         </q-card>
