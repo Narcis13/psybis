@@ -19,7 +19,7 @@
                             <q-btn to="receptie" class="full-width q-ma-xs" color="indigo"  no-caps>
                                 Receptie <br> Candidati
                             </q-btn>
-                            <q-btn to="indi13" class="full-width q-ma-xs" color="indigo"  no-caps>
+                            <q-btn to="alocareteste" class="full-width q-ma-xs" color="indigo"  no-caps>
                                 Alocare<br>Teste
                             </q-btn>
               
