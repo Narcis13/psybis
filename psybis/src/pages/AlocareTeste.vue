@@ -10,9 +10,9 @@ let check3=ref(false)
 <template>
     <div class="flex flex-center column" >
         <div class="text-h6 q-ma-md">Alocare teste</div>
-            <div class="flex flex-center q-pa-md" style="width: 90%">
-                <div class="row q-gutter-xl" >
-                    <q-list class="col-3" bordered padding>
+            <div class="flex flex-center q-pa-md" style="width: 1024px">
+                <div class="row q-gutter-xl" style="width: 1024px">
+                    <q-list class="col-3" bordered padding style="min-width:320px">
 
                         <q-item-label header>Teste disponibile</q-item-label>
                         <q-item tag="label" v-ripple>
@@ -56,9 +56,11 @@ let check3=ref(false)
                         
                     </q-list>
 
-                    <q-btn color="purple" label="Aloca -->" />
-
-                    <q-list class="col-3" bordered padding>
+                    <div class="column justify-center" style="height:400px">
+                        <q-btn class="col-2" color="purple" label="Aloca -->" />
+                    </div>
+                    
+                    <q-list class="col-3" bordered padding style="min-width:320px">
 
                             <q-item-label header>Candidati prezenti</q-item-label>
                             <q-item tag="label" v-ripple>
