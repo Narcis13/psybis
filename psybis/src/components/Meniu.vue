@@ -33,7 +33,7 @@
                         <q-card>
                         <q-card-section>
 
-                            <q-btn to="adminpro" class="full-width q-ma-xs" color="teal" no-caps>
+                            <q-btn to="utilizatori" class="full-width q-ma-xs" color="teal" no-caps>
                                 Utilizatori
                             </q-btn>
                             <q-btn to="rappro" class="full-width q-ma-xs" color="teal" no-caps>
@@ -82,7 +82,7 @@
                             <q-btn  class="full-width q-ma-xs" to="clinici111" color="grey-9" no-caps>
                             Import <br> Imagini & Sunete
                             </q-btn>
-                            <q-btn class="full-width q-ma-xs" color="grey-9" no-caps>
+                            <q-btn class="full-width q-ma-xs" to="studioconceptie" color="grey-9" no-caps>
                                 Conceptie <br> Baterii teste
                             </q-btn>
                
