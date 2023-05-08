@@ -1,9 +1,44 @@
 <script setup lang="ts">
 import {ref} from 'vue'
+import AntetTest from '@/components/AntetTest.vue'
 
 let tab=ref('design')
-let tabantet=ref('mails')
-let splitterModel=ref(20)
+//let tabantet=ref('mails')
+let splitterModel=ref(30)
+let selected= ref('Food')
+let arboretest = [
+        {
+          label: 'Test 1',
+          children: [
+            {
+              label: 'Food',
+              icon: 'restaurant_menu'
+            },
+            {
+              label: 'Room service',
+              icon: 'room_service',
+              children:[
+                {      
+                         label: 'Sub Item 1',
+                        icon: 'room_service'
+                    },
+                {
+                    label: 'Sub Item 2',
+                        icon: 'room_service'
+                },
+                {
+                    label: 'Sub Item 3',
+                        icon: 'room_service'
+                }
+              ]
+            },
+            {
+              label: 'Room view',
+              icon: 'photo'
+            }
+          ]
+        }
+      ]
 
 const thumbStyle= {
         right: '4px',
@@ -89,55 +124,56 @@ const barStyle= {
                             <q-tab-panels v-model="tab" animated>
                             <q-tab-panel name="design">
                                 <div>
-                                        <q-splitter
-                                        v-model="splitterModel"
-                                        style="height: 250px"
+                                    <q-splitter
+                                    v-model="splitterModel"
+                                    style="height: 400px"
+                                    >
+
+                                    <template v-slot:before>
+                                        <div class="q-pa-md">
+                                        <q-tree
+                                            :nodes="arboretest"
+                                            node-key="label"
+                                            selected-color="primary"
+                                            v-model:selected="selected"
+                                            default-expand-all
+                                        ></q-tree>
+                                        </div>
+                                    </template>
+
+                                    <template v-slot:after>
+                                        <q-tab-panels
+                                        v-model="selected"
+                                        animated
+                                        transition-prev="jump-up"
+                                        transition-next="jump-up"
                                         >
+                                        <q-tab-panel name="Test 1">
+                                            <antet-test />
+                                        </q-tab-panel>
 
-                                        <template v-slot:before>
-                                            <q-tabs
-                                            v-model="tabantet"
-                                            vertical
-                                            class="text-teal"
-                                            >
-                                            <q-tab name="mails" icon="mail" label="Antet" />
-                                            <q-tab name="alarms" icon="alarm" label="Instructiuni" />
-                                            <q-tab name="movies" icon="movie" label="Optiuni" />
-                                            </q-tabs>
-                                        </template>
+                                        <q-tab-panel name="Food">
+                                            <div class="text-h4 q-mb-md">Food</div>
+                                            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
+                                            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
+                                        </q-tab-panel>
 
-                                        <template v-slot:after>
-                                            <q-tab-panels
-                                            v-model="tabantet"
-                                            animated
-                                            swipeable
-                                            vertical
-                                            transition-prev="jump-up"
-                                            transition-next="jump-up"
-                                            >
-                                            <q-tab-panel name="mails">
-                                                <div class="text-h4 q-mb-md">Mails</div>
-                                                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
-                                                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
-                                            </q-tab-panel>
+                                        <q-tab-panel name="Room service">
+                                            <div class="text-h4 q-mb-md">Room service</div>
+                                            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
+                                            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
+                                            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
+                                        </q-tab-panel>
 
-                                            <q-tab-panel name="alarms">
-                                                <div class="text-h4 q-mb-md">Alarms</div>
-                                                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
-                                                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
-                                            </q-tab-panel>
-
-                                            <q-tab-panel name="movies">
-                                                <div class="text-h4 q-mb-md">Movies</div>
-                                                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
-                                                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
-                                                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
-                                            </q-tab-panel>
-                                            </q-tab-panels>
-                                        </template>
-
-                                        </q-splitter>
-                                    </div>
+                                        <q-tab-panel name="Room view">
+                                            <div class="text-h4 q-mb-md">Room view</div>
+                                            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
+                                            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
+                                        </q-tab-panel>
+                                        </q-tab-panels>
+                                    </template>
+                                    </q-splitter>
+                                </div>
                             </q-tab-panel>
 
                             <q-tab-panel name="preview">
