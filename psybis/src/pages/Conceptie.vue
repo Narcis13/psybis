@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import {ref} from 'vue'
+import {useConceptieTesteStore} from '../stores/StoreConceptieTeste'
 import AntetTest from '@/components/AntetTest.vue'
 import Game from '@/components/Game.vue'
+
+const conceptieStore = useConceptieTesteStore()
+console.log('Store conceptie teste', conceptieStore.colectieTeste)
 
 let tab=ref('design')
 //let tabantet=ref('mails')
@@ -69,6 +73,16 @@ const barStyle= {
         <div class="q-mt-md text-h6">Studio conceptie baterii de teste</div>
         <div class="row shadow-2 justify-around no-wrap" style="width:80vw;">  
                 <div class="col-3 q-ma-sm q-pa-sm">
+                    <div class="">
+                            <q-toolbar class="bg-primary glossy text-white">
+
+
+                            <q-toolbar-title>Baterii teste</q-toolbar-title>
+
+                            <q-btn flat round dense icon="add" />
+                            </q-toolbar>
+                        </div>
+
                     <q-scroll-area
                     :thumb-style="thumbStyle"
                     :bar-style="barStyle"
@@ -80,16 +94,16 @@ const barStyle= {
                             dolore magna aliqua.
                         </div> -->
 
-                        <q-list bordered class="rounded-borders" >
+                        <q-list bordered class="q-pa-md rounded-borders" >
       
 
-                            <q-item v-for="n in 100" :key="n" class="q-pa-xs">
+                            <q-item v-for="test in conceptieStore.colectieTeste" :key="test" class="q-pa-xs">
                                 <q-item-section avatar top>
                                 <q-icon name="account_tree" color="black" size="34px" />
                                 </q-item-section>
 
                                 <q-item-section top class="col-6 gt-sm">
-                                <q-item-label class="q-mt-sm">Test {{ n }}</q-item-label>
+                                <q-item-label class="q-mt-sm"> {{ test }}</q-item-label>
                                 </q-item-section>
 
                          
@@ -97,7 +111,7 @@ const barStyle= {
                                 <q-item-section top side>
                                 <div class="text-grey-8 q-gutter-xs">
                                     <q-btn class="gt-xs" size="12px" flat dense round icon="delete" />
-                                    <q-btn class="gt-xs" size="12px" flat dense round icon="done" />
+                                    <q-btn class="gt-xs" size="12px" flat dense round icon="edit" />
                                     <q-btn size="12px" flat dense round icon="more_vert" />
                                 </div>
                                 </q-item-section>
