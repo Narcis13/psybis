@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 import AntetTest from '@/components/AntetTest.vue'
+import Game from '@/components/Game.vue'
 
 let tab=ref('design')
 //let tabantet=ref('mails')
@@ -39,6 +40,11 @@ let arboretest = [
           ]
         }
       ]
+
+for(var i=0;i<27;i++){
+    arboretest[0].children.push({label:'Item '+i,icon:'photo'
+})
+}
 
 const thumbStyle= {
         right: '4px',
@@ -126,11 +132,16 @@ const barStyle= {
                                 <div>
                                     <q-splitter
                                     v-model="splitterModel"
-                                    style="height: 400px"
+                                    
                                     >
 
                                     <template v-slot:before>
                                         <div class="q-pa-md">
+                                            <q-scroll-area
+                                                :thumb-style="thumbStyle"
+                                                :bar-style="barStyle"
+                                                style="height:70vh;"
+                                                >
                                         <q-tree
                                             :nodes="arboretest"
                                             node-key="label"
@@ -138,6 +149,7 @@ const barStyle= {
                                             v-model:selected="selected"
                                             default-expand-all
                                         ></q-tree>
+                                            </q-scroll-area>
                                         </div>
                                     </template>
 
@@ -177,8 +189,10 @@ const barStyle= {
                             </q-tab-panel>
 
                             <q-tab-panel name="preview">
-                                <div class="text-h6">Alarms</div>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                <div class="flex flex-center">
+                                    <Game />
+                                </div>
+                              
                             </q-tab-panel>
 
                             </q-tab-panels>
