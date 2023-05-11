@@ -7,7 +7,7 @@ export default class PlayScene extends Scene {
 
    afiseazaIntrebare(){
     //console.log('afisez intrebare')
-    var question = "What is the capital of France? țșăîdfsfsdf sdfsdfsfsdf sdfsdfsdfs sdfsdfs dfsdfsdf sdfsdf sdfsdfffsdfsdfs fsdfsdfsdfsdfsf";
+    var question = "What is the capital of France?  ";
     var answerOptions = ["Paris", "Madrid", "Rome", "Berlin"];
     var correctAnswerIndex = 0; // Index of the correct answer in answerOptions
     
