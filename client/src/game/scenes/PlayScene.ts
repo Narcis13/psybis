@@ -5,6 +5,36 @@ export default class PlayScene extends Scene {
     super({ key: 'PlayScene' })
   }
 
+   afiseazaIntrebare(){
+    //console.log('afisez intrebare')
+    var question = "What is the capital of France? țșăîdfsfsdf sdfsdfsfsdf sdfsdfsdfs sdfsdfs dfsdfsdf sdfsdf sdfsdfffsdfsdfs fsdfsdfsdfsdfsf";
+    var answerOptions = ["Paris", "Madrid", "Rome", "Berlin"];
+    var correctAnswerIndex = 0; // Index of the correct answer in answerOptions
+    
+    var questionText = this.add.text(800, 200, question, { font: "72px Arial", color: "#ffffff", align: "center" ,wordWrap:{width:1600}});
+    questionText.setOrigin(0.5, 0.5);
+
+    // Create the answer option texts
+    var answerTexts = [];
+    for (var i = 0; i < answerOptions.length; i++) {
+        var answerText = this.add.text(400, 300 + (i * 50), answerOptions[i], { font: "24px Arial", color: "#ffffff", align: "center" });
+        answerText.setOrigin(0.5, 0.5);
+        answerTexts.push(answerText);
+
+        // Set up a click event for each answer option
+        answerText.setInteractive();
+        this.input.on('gameobjectdown', function (pointer, gameObject) {
+            if (answerTexts.indexOf(gameObject) === correctAnswerIndex) {
+                // The clicked answer is correct, so remove the question and answer texts
+                questionText.destroy();
+                for (var i = 0; i < answerTexts.length; i++) {
+                    answerTexts[i].destroy();
+                }
+            }
+        });
+      }
+   }
+
   create () {
     /*this.add.image(400, 300, 'sky')
 
@@ -29,7 +59,15 @@ export default class PlayScene extends Scene {
         callback: function() {
             countdownDuration--;
           //  console.log(countdownDuration)
-          if (countdownDuration > 0)   countdownText.setText(''+countdownDuration);
+          if (countdownDuration > 0)  {
+            countdownText.setText(''+countdownDuration)
+          }  
+          else
+          countdownText.destroy()
+          if(countdownDuration==0) {
+            countdownText.destroy()
+            this.afiseazaIntrebare()
+          };
 
             var prevCountdownText = countdownText;
 
