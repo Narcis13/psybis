@@ -1,9 +1,18 @@
 import { Scene } from 'phaser'
 
 export default class PlayScene extends Scene {
+  index 
+  questionText =null
+
   constructor () {
     super({ key: 'PlayScene' })
+    this.index=0
   }
+
+init(){
+  console.log('init')
+this.cursors = this.input.keyboard.createCursorKeys()
+}
 
    afiseazaIntrebare(){
     //console.log('afisez intrebare')
@@ -11,8 +20,8 @@ export default class PlayScene extends Scene {
     var answerOptions = ["Paris", "Madrid", "Rome", "Berlin"];
     var correctAnswerIndex = 0; // Index of the correct answer in answerOptions
     
-    var questionText = this.add.text(800, 200, question, { font: "72px Arial", color: "#ffffff", align: "center" ,wordWrap:{width:1600}});
-    questionText.setOrigin(0.5, 0.5);
+    this.questionText = this.add.text(800, 200+Math.random()*20, question, { font: "72px Arial", color: "#ffffff", align: "center" ,wordWrap:{width:1600}});
+    this.questionText.setOrigin(0.5, 0.5);
 
     // Create the answer option texts
     var answerTexts = [];
@@ -20,16 +29,19 @@ export default class PlayScene extends Scene {
         var answerText = this.add.text(400, 300 + (i * 50), answerOptions[i], { font: "24px Arial", color: "#ffffff", align: "center" });
         answerText.setOrigin(0.5, 0.5);
         answerTexts.push(answerText);
-
+        var that=this
         // Set up a click event for each answer option
         answerText.setInteractive();
         this.input.on('gameobjectdown', function (pointer, gameObject) {
             if (answerTexts.indexOf(gameObject) === correctAnswerIndex) {
                 // The clicked answer is correct, so remove the question and answer texts
-                questionText.destroy();
+                that.questionText.setVisible(false)
+               // questionText.destroy();
                 for (var i = 0; i < answerTexts.length; i++) {
                     answerTexts[i].destroy();
                 }
+                that.index++
+              //  that.afiseazaIntrebare();
             }
         });
       }
@@ -95,5 +107,10 @@ export default class PlayScene extends Scene {
   }
 
   update () {
+
+    if (this.cursors.down.isDown){
+      console.log('cursor down')
+      this.questionText.setVisible(true)
+    }
   }
 }
