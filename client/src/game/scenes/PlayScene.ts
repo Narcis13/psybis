@@ -65,7 +65,14 @@ export default class PlayScene extends Scene {
         console.log('gameObject clicked',that.index)
         if(that.index<that.items.length-1){
           that.index++
-          that.afiseazaIntrebare(that.index)
+          if(that.items[that.index].type=='static'){
+            that.afiseazaIntrebare(that.index)
+          }
+          else {
+            //aici incarc dinamic o scena...
+            console.log('Incerc sa lansez scena dinamica',that.items[that.index].item)
+          }
+         
         }
     });
 

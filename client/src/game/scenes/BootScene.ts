@@ -23,6 +23,11 @@ export default class BootScene extends Scene {
         item:'Unde ati prefera sa va petreceti concediul?',
         type:'static',
         subitems:['1. Intr-o tara nordica, rece!','2. Aproape de casa!','3. Intr-o zona calda, la mare!','4. La munte pentru a practica sport extrem!']
+      },
+      {
+        item:'cadrane',
+        type:'dinamic',
+        subitems:[]
       }
 
    ]
