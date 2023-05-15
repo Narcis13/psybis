@@ -12,17 +12,8 @@ export default class BootScene extends Scene {
   
   constructor () {
     super({ key: 'BootScene' })
-  }
-  
-  preload () {
-    this.load.image('sky', sky)
-    this.load.image('buton_start',butonstart)
-    this.load.image('bomb', bomb)
-    this.load.audio('thud', [thudMp3, thudOgg])
-  }
-
-  create () {
-   this.testdata.items=[
+    console.log('Boot scene created')
+    this.testdata.items=[
       {
         item:'Care este culoarea ta preferata?',
         type:'static',
@@ -35,15 +26,33 @@ export default class BootScene extends Scene {
       }
 
    ]
- 
 
+
+
+  }
+  
+  preload () {
+    this.load.image('sky', sky)
+    this.load.image('buton_start',butonstart)
+    this.load.image('bomb', bomb)
+    this.load.audio('thud', [thudMp3, thudOgg])
+  }
+
+  create () {
+
+
+ eventsCenter.emit('date-sosite',this.testdata.items) 
    const btn= this.add.image(800,1000,'buton_start')
    btn.setInteractive()
+
    btn.on('pointerdown',()=>{
-    eventsCenter.emit('date-sosite',this.testdata.items) 
+   
     this.scene.run('PlayScene')
+  
     btn.setVisible(false)
+   
    })
+
    // this.scene.start('PlayScene')
    
   }
