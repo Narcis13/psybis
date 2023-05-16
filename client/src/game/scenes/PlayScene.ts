@@ -1,5 +1,7 @@
 import { Scene } from 'phaser'
 import eventsCenter from './EventsCenter'
+import Cadrane from './Cadrane'
+
 export default class PlayScene extends Scene {
   index =0
   items={}
@@ -70,7 +72,9 @@ export default class PlayScene extends Scene {
           }
           else {
             //aici incarc dinamic o scena...
-            console.log('Incerc sa lansez scena dinamica',that.items[that.index].item)
+           // console.log('Incerc sa lansez scena dinamica',that.items[that.index].item)
+            that.scene.add(that.items[that.index].item,Cadrane,false,{nume:'Cadrane'})
+            that.scene.switch(that.items[that.index].item)
           }
          
         }

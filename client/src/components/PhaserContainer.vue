@@ -19,10 +19,10 @@ onUnmounted(() => {
   <div>
   <div class="q-pa-md q-gutter-sm">
     <q-banner class="bg-primary text-white">
-      Unfortunately, the credit card did not go through, please try again.
+      Test psihologic
       <template v-slot:action>
-        <q-btn flat color="white" label="Dismiss" />
-        <q-btn flat color="white" label="Update Credit Card" />
+        <q-btn flat color="white" label="Instructiuni" />
+        <q-btn flat color="white" label="Solicita ajutor!" />
       </template>
     </q-banner>
 
