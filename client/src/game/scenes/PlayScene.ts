@@ -73,7 +73,35 @@ export default class PlayScene extends Scene {
           else {
             //aici incarc dinamic o scena...
            // console.log('Incerc sa lansez scena dinamica',that.items[that.index].item)
-            that.scene.add(that.items[that.index].item,Cadrane,false,{nume:'Cadrane'})
+            that.scene.add(that.items[that.index].item,Cadrane,false,[
+              {
+                nume:'cadran_sus',
+                centruX:800,
+                centruY:300,
+                razaMare:180,
+                razaMica:140,
+                segmente:[{start:34,stop:83},{start:115,stop:145},{start:175,stop:230},{start:280,stop:330}],
+                viteza:0.01
+              },
+              {
+                nume:'cadran_stinga',
+                centruX:400,
+                centruY:800,
+                razaMare:180,
+                razaMica:140,
+                segmente:[{start:20,stop:70},{start:180,stop:255}],
+                viteza:-0.008
+              },
+              {
+                nume:'cadran_dreapta',
+                centruX:1200,
+                centruY:800,
+                razaMare:180,
+                razaMica:140,
+                segmente:[{start:42,stop:52},{start:110,stop:125},{start:280,stop:320}],
+                viteza:-0.006
+              }
+            ])
             that.scene.switch(that.items[that.index].item)
           }
          
