@@ -1,5 +1,5 @@
 import { Scene } from 'phaser'
-
+import green from '@/game/assets/green.png'
 export default class Cadrane extends Scene {
     config;
     text;
@@ -10,6 +10,7 @@ export default class Cadrane extends Scene {
     stanga;
     dreapta;
     sus;
+    meter;
     constructor(){
         super({ key: 'cadrane' })
         console.log('Scena cadrane')
@@ -22,7 +23,7 @@ export default class Cadrane extends Scene {
     }
     preload(){
 
-
+        this.load.image("green",green);
     }
 
     creezCadran(){
@@ -62,7 +63,7 @@ export default class Cadrane extends Scene {
 
 
        this.creezCadran();
-
+       this.meter=this.add.image(500,500,"green");
     this.mgraphics = this.add.graphics({ lineStyle: { width: 4, color: 0xaa00aa }, fillStyle: { color: 0x0000aa } });
 
     this.stanga = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
