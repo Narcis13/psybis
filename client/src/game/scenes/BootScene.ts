@@ -5,6 +5,7 @@ import bomb from '@/game/assets/bomb.png'
 import butonstart from '@/game/assets/butonstart.png'
 import thudMp3 from '@/game/assets/thud.mp3'
 import thudOgg from '@/game/assets/thud.ogg'
+import Cadrane from './Cadrane'
 
 export default class BootScene extends Scene {
   
@@ -14,7 +15,7 @@ export default class BootScene extends Scene {
     super({ key: 'BootScene' })
     console.log('Boot scene created')
     this.testdata.items=[
-      {
+      /*{
         item:'Care este culoarea ta preferata?',
         type:'static',
         subitems:['1. Albastru','2. Rosu','3. Verde','4. Negru']
@@ -23,7 +24,7 @@ export default class BootScene extends Scene {
         item:'Unde ati prefera sa va petreceti concediul?',
         type:'static',
         subitems:['1. Intr-o tara nordica, rece!','2. Aproape de casa!','3. Intr-o zona calda, la mare!','4. La munte pentru a practica sport extrem!']
-      },
+      },*/
       {
         item:'cadrane',
         type:'dinamic',
@@ -48,12 +49,51 @@ export default class BootScene extends Scene {
 
  eventsCenter.emit('date-sosite',this.testdata.items) 
    const btn= this.add.image(800,1000,'buton_start')
+   
    btn.setInteractive()
 
    btn.on('pointerdown',()=>{
    
-    this.scene.run('PlayScene')
-  
+    //this.scene.run('PlayScene')
+    this.scene.add('cadrane',Cadrane,true,{
+      durataRepriza:60000,
+      cadrane:[
+      {
+        nume:'cadran_sus',
+        centruX:800,
+        centruY:300,
+        razaMare:180,
+        razaMica:140,
+        segmente:[{start:34,stop:83},{start:115,stop:145},{start:175,stop:230},{start:280,stop:330}],
+        viteza:0.01
+      },
+      {
+        nume:'cadran_stinga',
+        centruX:380,
+        centruY:620,
+        razaMare:180,
+        razaMica:140,
+        segmente:[{start:20,stop:70},{start:180,stop:255}],
+        viteza:-0.008
+      },
+      {
+        nume:'cadran_dreapta',
+        centruX:1220,
+        centruY:620,
+        razaMare:180,
+        razaMica:140,
+        segmente:[{start:42,stop:52},{start:110,stop:125},{start:280,stop:320}],
+        viteza:-0.006
+      }],
+      bara:{
+        x:620,
+        y:720,
+        scalare:7,
+        durata:2000,
+        pauza:4000
+      }
+    }
+    )
     btn.setVisible(false)
    
    })

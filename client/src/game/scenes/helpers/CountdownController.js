@@ -67,7 +67,7 @@ export default class CountdownController
 		const elapsed = this.timerEvent.getElapsed()
 		const remaining = this.duration - elapsed
 		const seconds = remaining / 1000
-
-		this.label.text = seconds.toFixed(2)
+        
+		this.label.setText(seconds.toFixed(2))
 	}
 }

@@ -85,8 +85,8 @@ export default class PlayScene extends Scene {
               },
               {
                 nume:'cadran_stinga',
-                centruX:400,
-                centruY:800,
+                centruX:380,
+                centruY:620,
                 razaMare:180,
                 razaMica:140,
                 segmente:[{start:20,stop:70},{start:180,stop:255}],
@@ -94,8 +94,8 @@ export default class PlayScene extends Scene {
               },
               {
                 nume:'cadran_dreapta',
-                centruX:1200,
-                centruY:800,
+                centruX:1220,
+                centruY:620,
                 razaMare:180,
                 razaMica:140,
                 segmente:[{start:42,stop:52},{start:110,stop:125},{start:280,stop:320}],
