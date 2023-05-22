@@ -24,6 +24,9 @@ export default class Cadrane extends Scene {
             stadiu:'REPRIZA I',
             ruleaza:false
         }
+        this.stimuli=[null,null,null,null]
+        this.totalstimuli={cadran_sus:0,cadran_stanga:0,cadran_dreapta:0,bara:0}
+        this.evenimente={lista:[]}
     }
 
     init(config){
@@ -129,12 +132,12 @@ export default class Cadrane extends Scene {
     }
 
     handleCountdownFinished(){
-        console.log('GATA')
+        console.log('GATA',this.totalstimuli.cadran_stanga,this.evenimente)
         this.status.ruleaza=false;
     }
 
-    update(){
-
+    update(time){
+          //  console.log(time)
             this.mgraphics.clear();
             var unghi;
             for (let i = 0; i < this.lines.length; i++)
@@ -148,19 +151,39 @@ export default class Cadrane extends Scene {
                     unghi=360+Phaser.Math.RadToDeg(angle)
                 else
                     unghi=Phaser.Math.RadToDeg(angle)
-       
+                
+                if(i==1 && this.status.ruleaza) {
+                   // console.log('Unghi cadran stanga',Math.round(unghi))
+                    if(this.config.cadrane[1].viteza<0){
+                        this.config.cadrane[1].segmente.map(s=>{
+                           if(Math.round(unghi)==s.stop && this.stimuli[1]===null){
+                               this.stimuli[1]={startStimul:time}
+                               this.totalstimuli.cadran_stanga+=1;
+                           }
+                           if(Math.round(unghi)==s.start && this.stimuli[1]!==null){
+                            this.stimuli[1]=null;
+                           }
+                        })
+                    }
+                    else {
+
+                    }
+                }    
             
             }
 
 
         if (Phaser.Input.Keyboard.JustDown(this.stanga)){
-             console.log('STANGA')
-           /* if((unghi>=20&&unghi<=70)||(unghi>=180&&unghi<=270)){
-                this.text.setText('CORECT')
-            }
-            else {
-                this.text.setText('INCORECT')
-            }*/
+          //   console.log('STANGA',this.stimuli)
+       //   if(this.stimuli[1]!==null){
+            this.evenimente.lista.push({
+                stadiu:this.status.stadiu,
+                startStimul:this.stimuli[1]!==null?this.stimuli[1].startStimul:0,
+                reactie:this.stimuli[1]!==null?'corect':'inutil',
+                momentReactie:time,
+                element:'cadran_stanga'
+            })
+         // }
         }
         this.countdown.update()
     }
