@@ -43,14 +43,14 @@ export default class Cadrane extends Scene {
         this.load.image('bomb', bomb)
     }
 
-    afisezSteluta(){
+    afisezSteluta(x,y,u){
         var star = this.add.image(0, 0, 'bomb');
-
+          star.setScale(2)
         // Set the position on the imaginary circle
-        var centerX = 600;
-        var centerY = 600;
-        var radius = 200;
-        var angle = Phaser.Math.DegToRad(45);
+        var centerX = x;
+        var centerY = y;
+        var radius = 50;
+        var angle = Phaser.Math.DegToRad(u);
         var posX = centerX + radius * Math.cos(angle);
         var posY = centerY + radius * Math.sin(angle);
         star.setPosition(posX, posY);
@@ -144,6 +144,8 @@ export default class Cadrane extends Scene {
     this.mgraphics = this.add.graphics({ lineStyle: { width: 4, color: 0xaa00aa }, fillStyle: { color: 0x0000aa } });
 
     this.stanga = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+    this.dreapta = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+    this.sus = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
 
     this.input.keyboard.on('keydown', event =>
             {
@@ -155,14 +157,15 @@ export default class Cadrane extends Scene {
     }
 
     handleCountdownFinished(){
-        console.log('GATA',this.totalstimuli.cadran_stanga,this.evenimente)
+        console.log('GATA',this.totalstimuli.cadran_stanga,this.totalstimuli.cadran_dreapta,this.totalstimuli.cadran_sus,this.evenimente)
         this.status.ruleaza=false;
     }
 
     update(time){
           //  console.log(time)
             this.mgraphics.clear();
-            var unghi;
+            var unghi,unghiuri=[0,0,0]//unghi0,unghi1,unghi2;
+
             for (let i = 0; i < this.lines.length; i++)
             {
                 if (this.status.ruleaza)  Phaser.Geom.Line.RotateAroundPoint(this.lines[i], this.points[i], this.config.cadrane[i].viteza);
@@ -175,21 +178,32 @@ export default class Cadrane extends Scene {
                 else
                     unghi=Phaser.Math.RadToDeg(angle)
                 
-                if(i==1 && this.status.ruleaza) {
+                if(/*i==1 && */this.status.ruleaza) {
+                    unghiuri[i]=unghi;
                    // console.log('Unghi cadran stanga',Math.round(unghi))
-                    if(this.config.cadrane[1].viteza<0){
-                        this.config.cadrane[1].segmente.map(s=>{
-                           if(Math.round(unghi)==s.stop && this.stimuli[1]===null){
-                               this.stimuli[1]={startStimul:time}
-                               this.totalstimuli.cadran_stanga+=1;
+                    if(this.config.cadrane[i].viteza<0){
+                        this.config.cadrane[i].segmente.map(s=>{
+                           if(Math.round(unghi)==s.stop && this.stimuli[i]===null){
+                               this.stimuli[i]={startStimul:time}
+                               if(i==1) this.totalstimuli.cadran_stanga+=1;
+                               if(i==2) this.totalstimuli.cadran_dreapta+=1;
                            }
-                           if(Math.round(unghi)==s.start && this.stimuli[1]!==null){
-                            this.stimuli[1]=null;
+                           if(Math.round(unghi)==s.start && this.stimuli[i]!==null){
+                            this.stimuli[i]=null;
                            }
                         })
                     }
                     else {
-
+                        this.config.cadrane[i].segmente.map(s=>{
+                            if(Math.round(unghi)==s.start && this.stimuli[i]===null){
+                                this.stimuli[i]={startStimul:time}
+                                if(i==0) this.totalstimuli.cadran_sus+=1;
+                                
+                            }
+                            if(Math.round(unghi)==s.stop && this.stimuli[i]!==null){
+                             this.stimuli[i]=null;
+                            }
+                         })
                     }
                 }    
             
@@ -207,9 +221,43 @@ export default class Cadrane extends Scene {
             })
             
             if(this.stimuli[1]!==null){
-                this.afisezSteluta()
+              //  console.log(this.lines[1],this.points[1])
+                this.afisezSteluta(this.lines[1].x2,this.lines[1].y2,unghiuri[1])
             }
         }
+
+        if (Phaser.Input.Keyboard.JustDown(this.dreapta)){
+   
+            this.evenimente.lista.push({
+                stadiu:this.status.stadiu,
+                startStimul:this.stimuli[2]!==null?this.stimuli[2].startStimul:0,
+                reactie:this.stimuli[2]!==null?'corect':'inutil',
+                momentReactie:time,
+                element:'cadran_dreapta'
+            })
+            
+            if(this.stimuli[2]!==null){
+              //  console.log(this.lines[1],this.points[1])
+                this.afisezSteluta(this.lines[2].x2,this.lines[2].y2,unghiuri[2])
+            }
+        }
+
+        if (Phaser.Input.Keyboard.JustDown(this.sus)){
+   
+            this.evenimente.lista.push({
+                stadiu:this.status.stadiu,
+                startStimul:this.stimuli[0]!==null?this.stimuli[0].startStimul:0,
+                reactie:this.stimuli[0]!==null?'corect':'inutil',
+                momentReactie:time,
+                element:'cadran_sus'
+            })
+            
+            if(this.stimuli[0]!==null){
+              //  console.log(this.lines[1],this.points[1])
+                this.afisezSteluta(this.lines[0].x2,this.lines[0].y2,unghiuri[0])
+            }
+        }
+
         this.countdown.update()
     }
 } 
