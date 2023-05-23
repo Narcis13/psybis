@@ -2,6 +2,8 @@ import { Scene } from 'phaser'
 import CountdownController from '@/game/scenes/helpers/CountdownController'
 import meter_light from '@/game/assets/meter_light.png'
 import butonstart from '@/game/assets/butonstart.png'
+import bomb from '@/game/assets/bomb.png'
+
 export default class Cadrane extends Scene {
     config;
     text;
@@ -38,7 +40,28 @@ export default class Cadrane extends Scene {
 
         this.load.image("meter",meter_light);
         this.load.image('buton_start',butonstart)
+        this.load.image('bomb', bomb)
     }
+
+    afisezSteluta(){
+        var star = this.add.image(0, 0, 'bomb');
+
+        // Set the position on the imaginary circle
+        var centerX = 600;
+        var centerY = 600;
+        var radius = 200;
+        var angle = Phaser.Math.DegToRad(45);
+        var posX = centerX + radius * Math.cos(angle);
+        var posY = centerY + radius * Math.sin(angle);
+        star.setPosition(posX, posY);
+    
+        // Display the star for a second
+        var duration = 1000; // 1 second
+        this.time.delayedCall(duration, function() {
+            star.setVisible(false);
+        }, [], this);
+    }
+
 
     creezCadran(){
         var idx=0;
@@ -174,8 +197,7 @@ export default class Cadrane extends Scene {
 
 
         if (Phaser.Input.Keyboard.JustDown(this.stanga)){
-          //   console.log('STANGA',this.stimuli)
-       //   if(this.stimuli[1]!==null){
+   
             this.evenimente.lista.push({
                 stadiu:this.status.stadiu,
                 startStimul:this.stimuli[1]!==null?this.stimuli[1].startStimul:0,
@@ -183,7 +205,10 @@ export default class Cadrane extends Scene {
                 momentReactie:time,
                 element:'cadran_stanga'
             })
-         // }
+            
+            if(this.stimuli[1]!==null){
+                this.afisezSteluta()
+            }
         }
         this.countdown.update()
     }
