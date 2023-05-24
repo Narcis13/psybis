@@ -20,6 +20,8 @@ export default class Cadrane extends Scene {
     constructor(){
         super({ key: 'cadrane' })
         console.log('Scena cadrane')
+        this.moment=0
+        this.bara=null;
         this.lines=[]
         this.points=[]
         this.status={
@@ -111,9 +113,13 @@ export default class Cadrane extends Scene {
        var meter=this.add.image(this.config.bara.x,this.config.bara.y,"meter");
        meter.setOrigin(0.0,0.5)
        meter.scaleX=0
-
+       this.bara=meter;
        var that=this
        function startScaling() {
+       if(that.stimuli[3]===null) {
+        that.stimuli[3]={startStimul:that.moment,murdar:false}
+        that.totalstimuli.bara+=1;
+       }
         // Create the scaling tween
         var scaleTween = this.tweens.add({
             targets: meter,
@@ -123,13 +129,15 @@ export default class Cadrane extends Scene {
             onComplete: function () {
                 // After scaling, reset the scale and start the next scaling tween after a delay
                 meter.scaleX=0.0;
-
+                that.stimuli[3]=null;
                if (that.status.ruleaza) that.time.delayedCall(that.config.bara.pauza, startScaling, [], that);
             },
             onCompleteScope: that
         });
         }
+
         this.countdown = new CountdownController(this, this.text)
+
         btn.on('pointerdown',()=>{
             this.status.ruleaza=true 
             this.countdown.start(this.handleCountdownFinished.bind(this),this.config.durataRepriza)
@@ -146,6 +154,7 @@ export default class Cadrane extends Scene {
     this.stanga = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
     this.dreapta = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
     this.sus = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+    this.spatiu = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
     this.input.keyboard.on('keydown', event =>
             {
@@ -157,7 +166,7 @@ export default class Cadrane extends Scene {
     }
 
     handleCountdownFinished(){
-        console.log('GATA',this.totalstimuli.cadran_stanga,this.totalstimuli.cadran_dreapta,this.totalstimuli.cadran_sus,this.evenimente)
+        console.log('GATA',this.totalstimuli.cadran_stanga,this.totalstimuli.cadran_dreapta,this.totalstimuli.cadran_sus,this.totalstimuli.bara,this.evenimente)
         this.status.ruleaza=false;
     }
 
@@ -165,7 +174,7 @@ export default class Cadrane extends Scene {
           //  console.log(time)
             this.mgraphics.clear();
             var unghi,unghiuri=[0,0,0]//unghi0,unghi1,unghi2;
-
+            this.moment=time
             for (let i = 0; i < this.lines.length; i++)
             {
                 if (this.status.ruleaza)  Phaser.Geom.Line.RotateAroundPoint(this.lines[i], this.points[i], this.config.cadrane[i].viteza);
@@ -184,7 +193,7 @@ export default class Cadrane extends Scene {
                     if(this.config.cadrane[i].viteza<0){
                         this.config.cadrane[i].segmente.map(s=>{
                            if(Math.round(unghi)==s.stop && this.stimuli[i]===null){
-                               this.stimuli[i]={startStimul:time}
+                               this.stimuli[i]={startStimul:time,murdar:false}
                                if(i==1) this.totalstimuli.cadran_stanga+=1;
                                if(i==2) this.totalstimuli.cadran_dreapta+=1;
                            }
@@ -196,7 +205,7 @@ export default class Cadrane extends Scene {
                     else {
                         this.config.cadrane[i].segmente.map(s=>{
                             if(Math.round(unghi)==s.start && this.stimuli[i]===null){
-                                this.stimuli[i]={startStimul:time}
+                                this.stimuli[i]={startStimul:time,murdar:false}
                                 if(i==0) this.totalstimuli.cadran_sus+=1;
                                 
                             }
@@ -215,14 +224,15 @@ export default class Cadrane extends Scene {
             this.evenimente.lista.push({
                 stadiu:this.status.stadiu,
                 startStimul:this.stimuli[1]!==null?this.stimuli[1].startStimul:0,
-                reactie:this.stimuli[1]!==null?'corect':'inutil',
+                reactie:this.stimuli[1]!==null&&!this.stimuli[1].murdar?'corect':'inutil',
                 momentReactie:time,
                 element:'cadran_stanga'
             })
             
-            if(this.stimuli[1]!==null){
+            if(this.stimuli[1]!==null&&!this.stimuli[1].murdar){
               //  console.log(this.lines[1],this.points[1])
                 this.afisezSteluta(this.lines[1].x2,this.lines[1].y2,unghiuri[1])
+                this.stimuli[1].murdar=true;
             }
         }
 
@@ -231,14 +241,15 @@ export default class Cadrane extends Scene {
             this.evenimente.lista.push({
                 stadiu:this.status.stadiu,
                 startStimul:this.stimuli[2]!==null?this.stimuli[2].startStimul:0,
-                reactie:this.stimuli[2]!==null?'corect':'inutil',
+                reactie:this.stimuli[2]!==null&&!this.stimuli[2].murdar?'corect':'inutil',
                 momentReactie:time,
                 element:'cadran_dreapta'
             })
             
-            if(this.stimuli[2]!==null){
+            if(this.stimuli[2]!==null&&!this.stimuli[2].murdar){
               //  console.log(this.lines[1],this.points[1])
                 this.afisezSteluta(this.lines[2].x2,this.lines[2].y2,unghiuri[2])
+                this.stimuli[2].murdar=true;
             }
         }
 
@@ -247,14 +258,32 @@ export default class Cadrane extends Scene {
             this.evenimente.lista.push({
                 stadiu:this.status.stadiu,
                 startStimul:this.stimuli[0]!==null?this.stimuli[0].startStimul:0,
-                reactie:this.stimuli[0]!==null?'corect':'inutil',
+                reactie:this.stimuli[0]!==null&&!this.stimuli[0].murdar?'corect':'inutil',
                 momentReactie:time,
                 element:'cadran_sus'
             })
             
-            if(this.stimuli[0]!==null){
+            if(this.stimuli[0]!==null&&!this.stimuli[0].murdar){
               //  console.log(this.lines[1],this.points[1])
                 this.afisezSteluta(this.lines[0].x2,this.lines[0].y2,unghiuri[0])
+                this.stimuli[0].murdar=true;
+            }
+        }
+
+        if (Phaser.Input.Keyboard.JustDown(this.spatiu)){
+          //  console.log(this.stimuli[3])
+            this.evenimente.lista.push({
+                stadiu:this.status.stadiu,
+                startStimul:this.stimuli[3]!==null?this.stimuli[3].startStimul:0,
+                reactie:this.stimuli[3]!==null&&!this.stimuli[3].murdar?'corect':'inutil',
+                momentReactie:time,
+                element:'bara'
+            })
+            
+            if(this.stimuli[3]!==null&&!this.stimuli[3].murdar){
+                console.log(this.bara)
+                this.afisezSteluta(800,this.config.bara.y-100,90)
+                this.stimuli[3].murdar=true;
             }
         }
 
