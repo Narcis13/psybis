@@ -2,7 +2,7 @@ import { Scene } from 'phaser'
 import CountdownController from '@/game/scenes/helpers/CountdownController'
 import meter_light from '@/game/assets/meter_light.png'
 import butonstart from '@/game/assets/butonstart.png'
-import bomb from '@/game/assets/bomb.png'
+import bomb from '@/game/assets/stea.png'
 
 export default class Cadrane extends Scene {
     config;
@@ -47,7 +47,7 @@ export default class Cadrane extends Scene {
 
     afisezSteluta(x,y,u){
         var star = this.add.image(0, 0, 'bomb');
-          star.setScale(2)
+         // star.setScale(2)
         // Set the position on the imaginary circle
         var centerX = x;
         var centerY = y;
@@ -281,8 +281,8 @@ export default class Cadrane extends Scene {
             })
             
             if(this.stimuli[3]!==null&&!this.stimuli[3].murdar){
-                console.log(this.bara)
-                this.afisezSteluta(800,this.config.bara.y-100,90)
+                console.log(this.bara.scaleX)
+                this.afisezSteluta(this.config.bara.x+this.bara.scaleX*50,this.config.bara.y-100,90)
                 this.stimuli[3].murdar=true;
             }
         }
