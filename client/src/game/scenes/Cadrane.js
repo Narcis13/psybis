@@ -1,12 +1,14 @@
 import { Scene } from 'phaser'
 import CountdownController from '@/game/scenes/helpers/CountdownController'
 import meter_light from '@/game/assets/meter_light.png'
-import butonstart from '@/game/assets/butonstart.png'
+import butonmaideparte from '@/game/assets/maideparte.png'
+import sageti from '@/game/assets/sageti.png'
 import bomb from '@/game/assets/stea.png'
 
 export default class Cadrane extends Scene {
     config;
     text;
+    mesaj;
     points;
     lines;
     fgraphics;
@@ -19,18 +21,32 @@ export default class Cadrane extends Scene {
     countdown;
     constructor(){
         super({ key: 'cadrane' })
-        console.log('Scena cadrane')
+        console.log('Scena cadrane constructor')
         this.moment=0
+        this.index_instructaj=0;
+        this.mesajetaste=[null,null,null]
         this.bara=null;
         this.lines=[]
         this.points=[]
+        this.stadii=['INSTRUCTAJ','ANTRENAMENT','REPRIZA I','REPRIZA II']
         this.status={
-            stadiu:'REPRIZA I',
+            indexstadiu:0,
+            stadiu:'INSTRUCTAJ',
             ruleaza:false
         }
         this.stimuli=[null,null,null,null]
         this.totalstimuli={cadran_sus:0,cadran_stanga:0,cadran_dreapta:0,bara:0}
-        this.evenimente={lista:[]}
+        this.evenimente={
+            startInstructaj:null,
+            startAntrenament:null,
+            startReprizaI:null,
+            startReprizaII:null,
+            stopTest:null,
+            totalStimuliReprizaI:[],
+            totalStimuliReprizaII:[],
+            totalApasariIncorecte:0, 
+            lista:[]
+        }
     }
 
     init(config){
@@ -41,8 +57,44 @@ export default class Cadrane extends Scene {
     preload(){
 
         this.load.image("meter",meter_light);
-        this.load.image('buton_start',butonstart)
+        this.load.image('buton_maideparte',butonmaideparte)
         this.load.image('bomb', bomb)
+        this.load.image('sageti', sageti)
+    }
+
+    creezInstructaj(eUltima){
+        if(this.status.stadiu=='INSTRUCTAJ'){
+            if(eUltima){
+                this.mesajetaste[0].setVisible(false)
+                this.mesajetaste[1].setVisible(false)
+                this.mesajetaste[2].setVisible(false)
+
+                this.mesaj.setX(100)
+               this.mesaj.setWordWrapWidth(1400)
+              // this.time.removeAllEvents();
+              var ts=this.tweens.getTweens()
+              //console.log('ts',ts)
+              if(ts.length>0) {
+                this.tweens.reset(ts[0])
+                this.tweens.remove(ts[0])
+              }
+               this.status.ruleaza=false;
+            }
+            this.mesaj.setText(this.config.instructiuni[this.index_instructaj].text);
+            if(this.config.instructiuni[this.index_instructaj].subtextstanga){
+                console.log('SUBTEXT STANGA')
+                this.mesajetaste[0] = this.add.text(50, 950, this.config.instructiuni[this.index_instructaj].subtextstanga, { font: "32px Arial", color: '#add8e6', align: "left" ,wordWrap:{width:500}});
+                this.mesajetaste[1] = this.add.text(550, 950, this.config.instructiuni[this.index_instructaj].subtextdreapta, { font: "32px Arial", color: '#add8e6', align: "left" ,wordWrap:{width:450}});
+                this.mesajetaste[2] = this.add.image(1050, 1000, 'sageti')
+            }
+        }
+        else {
+            this.mesaj.setText(this.status.stadiu)
+            this.mesaj.setY(950)
+            this.mesaj.setX(this.config.bara.x)
+            this.mesaj.setAlign('center')
+        }
+
     }
 
     afisezSteluta(x,y,u){
@@ -97,13 +149,26 @@ export default class Cadrane extends Scene {
     }
 
     create(){
-      
-        const btn= this.add.image(800,1000,'buton_start')
-   
+        this.input.setDefaultCursor('url(cursors/blue.cur), pointer');
+        const btn= this.add.image(1300,950,'buton_maideparte')
+        btn.on('pointerover', function (event)
+        {
+
+            this.setTint(0xff0000);
+
+        });
+
+        btn.on('pointerout', function (event)
+        {
+
+            this.clearTint();
+
+        });
         btn.setInteractive()
         
 
-
+        this.mesaj = this.add.text(50, 900, this.config.instructiuni[this.index_instructaj].text, { font: "40px Arial", color: '#add8e6', align: "left" ,wordWrap:{width:1000}});
+        this.evenimente.startInstructaj=Date.now();
        this.text = this.add.text(100, 50, '');
 
        this.creezCadran();
@@ -135,15 +200,21 @@ export default class Cadrane extends Scene {
             onCompleteScope: that
         });
         }
-
+        this.time.delayedCall(this.config.bara.pauza, startScaling, [], this);
         this.countdown = new CountdownController(this, this.text)
-
+        this.status.ruleaza=true;
         btn.on('pointerdown',()=>{
-            this.status.ruleaza=true 
+           // asta e valabil dupa instructaj 
+          /*  this.status.ruleaza=true 
             this.countdown.start(this.handleCountdownFinished.bind(this),this.config.durataRepriza)
             this.time.delayedCall(this.config.bara.pauza, startScaling, [], this);
             
-            btn.setVisible(false)
+            btn.setVisible(false)*/
+            this.index_instructaj+=1
+            let ultima = this.index_instructaj==this.config.instructiuni.length-1 ? true:false
+            if (ultima) btn.setVisible(false)
+            this.creezInstructaj(ultima)
+            
         })
     
 		
@@ -161,13 +232,91 @@ export default class Cadrane extends Scene {
                 if(event.repeat) return;
                 console.dir(event);
 
+                if(this.status.stadiu=='REPRIZA I'||this.status.stadiu=='REPRIZA II'&&this.status.ruleaza){
+                    if(event.keyCode!==32||event.keyCode!==37||event.keyCode!==38||event.keyCode!==39){
+                        this.evenimente.totalApasariIncorecte+=1
+                    }
+                    
+
+                }
+
+                if(this.index_instructaj==this.config.instructiuni.length-1&&event.keyCode==66){
+                 //   console.log('Sa inceapa antrenamentul')
+                    this.evenimente.startAntrenament=Date.now()
+                    this.index_instructaj=0;
+                    this.resetCadrane()
+                    this.status.ruleaza=true;
+                    this.status.stadiu='ANTRENAMENT'
+                    this.countdown.start(this.handleCountdownFinished.bind(this),this.config.durataAntrenament)
+                    this.time.delayedCall(this.config.bara.pauza, startScaling, [], this);
+                    this.creezInstructaj(false)
+                }
+
+                if(this.status.stadiu=='ANTRENAMENT'&&event.keyCode==67&&!this.status.ruleaza){
+                    this.evenimente.startReprizaI=Date.now()
+                    this.evenimente.lista=[]
+                    this.resetCadrane()
+                    this.status.ruleaza=true;
+                    this.status.stadiu='REPRIZA I'
+                    this.countdown.start(this.handleCountdownFinished.bind(this),this.config.durataRepriza)
+                    this.time.delayedCall(this.config.bara.pauza, startScaling, [], this);
+                    this.creezInstructaj(false)
+                }
+
+                if(this.status.stadiu=='REPRIZA I'&&event.keyCode==67&&!this.status.ruleaza){
+                    this.evenimente.startReprizaII=Date.now()
+                    this.resetCadrane()
+                    this.status.ruleaza=true;
+                    this.status.stadiu='REPRIZA II'
+                    this.countdown.start(this.handleCountdownFinished.bind(this),this.config.durataRepriza)
+                    this.time.delayedCall(this.config.bara.pauza, startScaling, [], this);
+                    this.creezInstructaj(false)
+                }
+
+
+
             });
 
     }
 
     handleCountdownFinished(){
-        console.log('GATA',this.totalstimuli.cadran_stanga,this.totalstimuli.cadran_dreapta,this.totalstimuli.cadran_sus,this.totalstimuli.bara,this.evenimente)
+        console.log('GATA',this.totalstimuli.cadran_sus,this.totalstimuli.cadran_stanga,this.totalstimuli.cadran_dreapta,this.totalstimuli.bara,this.evenimente)
         this.status.ruleaza=false;
+        if(this.status.stadiu=='ANTRENAMENT'){
+            this.mesaj.setX(200)
+            this.totalstimuli.cadran_sus=0
+            this.totalstimuli.cadran_stanga=0
+            this.totalstimuli.cadran_dreapta=0
+            this.totalstimuli.bara=0
+            this.mesaj.setText('Pentru a incepe prima repriza a testului apasati tasta C')
+        }
+        if(this.status.stadiu=='REPRIZA I'){
+            this.mesaj.setX(200)
+            this.mesaj.setText('Pentru a incepe a doua repriza a testului apasati tasta C')
+            this.evenimente.totalStimuliReprizaI=[this.totalstimuli.cadran_sus,this.totalstimuli.cadran_stanga,this.totalstimuli.cadran_dreapta,this.totalstimuli.bara]
+            this.totalstimuli.cadran_sus=0
+            this.totalstimuli.cadran_stanga=0
+            this.totalstimuli.cadran_dreapta=0
+            this.totalstimuli.bara=0
+        }
+        if(this.status.stadiu=='REPRIZA II'){
+            this.mesaj.setX(this.config.bara.x)
+            this.evenimente.totalStimuliReprizaII=[this.totalstimuli.cadran_sus,this.totalstimuli.cadran_stanga,this.totalstimuli.cadran_dreapta,this.totalstimuli.bara]
+            this.mesaj.setText('FINAL! VA MULTUMIM!')
+            this.evenimente.stopTest=Date.now()
+            this.evenimente.totalApasariIncorecte=this.evenimente.totalApasariIncorecte-2
+        }
+    }
+
+    resetCadrane(){
+        for (let i = 0; i < this.lines.length; i++)
+        { 
+            var angle = Phaser.Geom.Line.Angle(this.lines[i]);
+           // var targetAngle = Math.atan2(this.points[i].y - 0, this.points[i].x - 0) - Math.PI / 4;
+            Phaser.Geom.Line.RotateAroundPoint(this.lines[i], this.points[i], -angle + (7 * Phaser.Math.PI2)/8)
+        }
+           
+          
     }
 
     update(time){
@@ -219,7 +368,7 @@ export default class Cadrane extends Scene {
             }
 
 
-        if (Phaser.Input.Keyboard.JustDown(this.stanga)){
+        if (this.status.stadiu!=='INSTRUCTAJ'&&Phaser.Input.Keyboard.JustDown(this.stanga)){
    
             this.evenimente.lista.push({
                 stadiu:this.status.stadiu,
@@ -236,7 +385,7 @@ export default class Cadrane extends Scene {
             }
         }
 
-        if (Phaser.Input.Keyboard.JustDown(this.dreapta)){
+        if (this.status.stadiu!=='INSTRUCTAJ'&&Phaser.Input.Keyboard.JustDown(this.dreapta)){
    
             this.evenimente.lista.push({
                 stadiu:this.status.stadiu,
@@ -253,8 +402,8 @@ export default class Cadrane extends Scene {
             }
         }
 
-        if (Phaser.Input.Keyboard.JustDown(this.sus)){
-   
+        if (this.status.stadiu!=='INSTRUCTAJ'&&Phaser.Input.Keyboard.JustDown(this.sus)){
+            //console.log('sus')
             this.evenimente.lista.push({
                 stadiu:this.status.stadiu,
                 startStimul:this.stimuli[0]!==null?this.stimuli[0].startStimul:0,
@@ -270,7 +419,7 @@ export default class Cadrane extends Scene {
             }
         }
 
-        if (Phaser.Input.Keyboard.JustDown(this.spatiu)){
+        if (this.status.stadiu!=='INSTRUCTAJ'&&Phaser.Input.Keyboard.JustDown(this.spatiu)){
           //  console.log(this.stimuli[3])
             this.evenimente.lista.push({
                 stadiu:this.status.stadiu,
@@ -281,7 +430,7 @@ export default class Cadrane extends Scene {
             })
             
             if(this.stimuli[3]!==null&&!this.stimuli[3].murdar){
-                console.log(this.bara.scaleX)
+              //  console.log(this.bara.scaleX)
                 this.afisezSteluta(this.config.bara.x+this.bara.scaleX*50,this.config.bara.y-100,90)
                 this.stimuli[3].murdar=true;
             }

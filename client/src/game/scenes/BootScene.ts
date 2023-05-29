@@ -57,6 +57,22 @@ export default class BootScene extends Scene {
     //this.scene.run('PlayScene')
     this.scene.add('cadrane',Cadrane,true,{
       durataRepriza:60000,
+      durataAntrenament:60000,
+      instructiuni:[{
+        text:'Priviti ecranul, observati existenta unor cadrane care au pe margine zone mai inchise la culoare. Intre cadrane se afla o banda albastra'
+      },
+      {
+        text:'Sarcina dvs. va fi sa urmariti acele care se rotesc continuu. Cand oricare dintre ace atinge o zona albastra, va trebui sa apasati o anumita tasta, corespunzatoare acelui cadran. Tastele vor fi precizate mai tarziu.'
+      },
+    {
+      text:'La rindul ei, banda albastra dintre cadrane incepe sa-si schimbe culoarea la anumite intervale. Si in acest caz va trebui sa actionati o tasta imediat ce veti observa acest lucru.'
+    },{
+      text:'Tastele care trebuie actionate sunt urmatoarele:',
+      subtextstanga:'pentru BANDA tasta BLANK, actionata cu mana stanga',
+      subtextdreapta:'pentru CADRANE tastele cursor actionate cu 3 degete de la mana dreapta'
+    },{
+      text:'RETINETI: Urmariti simultan toate cadranele si banda. Apasati "sagetile" numai cind acele intra pe zonele albastre. Apasati BLANK numai cind banda incepe sa isi schimbe culoarea. Orice alte apasari sunt erori. Omiterea apasarilor necesare este considerata eroare. \nApasati B pentru inceperea unei reprize de antrenament>' 
+    }],
       cadrane:[
       {
         nume:'cadran_sus',
