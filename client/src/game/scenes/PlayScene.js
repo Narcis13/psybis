@@ -27,7 +27,7 @@ export default class PlayScene extends Scene {
 
   }
 
-   afiseazaIntrebare(idx:number){
+   afiseazaIntrebare(idx){
     console.log('afisez intrebare',idx)
     var question = this.items[idx].item;
     var answerOptions = this.items[idx].subitems;

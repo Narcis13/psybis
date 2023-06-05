@@ -1,8 +1,8 @@
 import Phaser from 'phaser'
-import BootScene from '@/game/scenes/BootScene'
-import PlayScene from '@/game/scenes/PlayScene'
+import BootScene from '@/game/scenes/BootScene.js'
+import PlayScene from '@/game/scenes/PlayScene.js'
 
-function launch(containerId: string) {
+function launch(containerId) {
   return new Phaser.Game({
     type: Phaser.AUTO,
     width: 1600,
