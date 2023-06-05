@@ -1,171 +1,246 @@
 <script setup lang="ts">
+import {ref,reactive} from 'vue'
+import axios from 'axios'
+import { useQuasar } from 'quasar'
 
-const columns = [
-  {
-    name: 'name',
-    required: true,
-    label: 'Dessert (100g serving)',
-    align: 'left',
-    field: row => row.name,
-    format: val => `${val}`,
-    sortable: true
-  },
-  { name: 'calories', align: 'center', label: 'Calories', field: 'calories', sortable: true },
-  { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
-  { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
-  { name: 'protein', label: 'Protein (g)', field: 'protein' },
-  { name: 'sodium', label: 'Sodium (mg)', field: 'sodium' },
-  { name: 'calcium', label: 'Calcium (%)', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-  { name: 'iron', label: 'Iron (%)', field: 'iron', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
-]
+let tab= ref('nou')
+const $q = useQuasar()
+let datanastere = ref('1975/01/01')
+let optiunistudii=['Studii medii','Studii universitare','Studii postuniversitare']
+let optiunisex=['Masculin','Feminin']
+let sex=ref('Masculin')
+let studii = ref('Studii universitare')
+let nume = ref('')
+let initiala = ref('')
+let prenume = ref('')
+let angajator = ref('')
+let numardosar=ref('')
+let categorie=ref(null)
+let categorii:any[]=[]
+let functie=ref(null)
+let functii:any[]=[]
 
-const rows = [
-  {
-    name: 'Frozen Yogurt',
-    calories: 159,
-    fat: 6.0,
-    carbs: 24,
-    protein: 4.0,
-    sodium: 87,
-    calcium: '14%',
-    iron: '1%'
-  },
-  {
-    name: 'Ice cream sandwich',
-    calories: 237,
-    fat: 9.0,
-    carbs: 37,
-    protein: 4.3,
-    sodium: 129,
-    calcium: '8%',
-    iron: '1%'
-  },
-  {
-    name: 'Eclair',
-    calories: 262,
-    fat: 16.0,
-    carbs: 23,
-    protein: 6.0,
-    sodium: 337,
-    calcium: '6%',
-    iron: '7%'
-  },
-  {
-    name: 'Cupcake',
-    calories: 305,
-    fat: 3.7,
-    carbs: 67,
-    protein: 4.3,
-    sodium: 413,
-    calcium: '3%',
-    iron: '8%'
-  },
-  {
-    name: 'Gingerbread',
-    calories: 356,
-    fat: 16.0,
-    carbs: 49,
-    protein: 3.9,
-    sodium: 327,
-    calcium: '7%',
-    iron: '16%'
-  },
-  {
-    name: 'Jelly bean',
-    calories: 375,
-    fat: 0.0,
-    carbs: 94,
-    protein: 0.0,
-    sodium: 50,
-    calcium: '0%',
-    iron: '0%'
-  },
-  {
-    name: 'Lollipop',
-    calories: 392,
-    fat: 0.2,
-    carbs: 98,
-    protein: 0,
-    sodium: 38,
-    calcium: '0%',
-    iron: '2%'
-  },
-  {
-    name: 'Honeycomb',
-    calories: 408,
-    fat: 3.2,
-    carbs: 87,
-    protein: 6.5,
-    sodium: 562,
-    calcium: '0%',
-    iron: '45%'
-  },
-  {
-    name: 'Donut',
-    calories: 452,
-    fat: 25.0,
-    carbs: 51,
-    protein: 4.9,
-    sodium: 326,
-    calcium: '2%',
-    iron: '22%'
-  },
-  {
-    name: 'KitKat',
-    calories: 518,
-    fat: 26.0,
-    carbs: 65,
-    protein: 7,
-    sodium: 54,
-    calcium: '12%',
-    iron: '6%'
+const state=reactive({
+  categorii:[],
+  functii:[],
+  candidati:[]
+})
+const host=import.meta.env.VITE_HOST
+
+axios.get(host+'candidati/toatecategoriile').then(
+  res=>{
+    // console.log('toate categoriile',res.data)
+     res.data.map((c:any)=>{
+      state.categorii.push({
+        label:c.denumire,
+        value:c.id
+      })
+      categorie.value=state.categorii[0]
+     })
   }
+).catch(err=>{
+  console.log(err)
+})
+
+axios.get(host+'candidati/toatefunctiile').then(
+  res=>{
+   //  console.log('toate categoriile',res.data)
+     res.data.map((f:any)=>{
+      state.functii.push({
+        label:f.denumire,
+        value:f.id
+      })
+      functie.value=state.functii[0]
+     })
+  }
+).catch(err=>{
+  console.log(err)
+})
+
+function ultimiiCandidati(){
+  state.candidati=[]
+  axios.get(host+'candidati/ultimii').then(
+  res=>{
+     //console.log('ultimii candidati',res.data.ultimii[0])
+     res.data.ultimii[0].map(c=>{
+      state.candidati.push(c)
+     })
+
+  }
+).catch(err=>{
+  console.log(err)
+})
+}
+
+ultimiiCandidati()
+
+function adaugaCandidat(cuPrezentare=false){
+  const candidat={
+    nume:nume.value,
+    prenume:prenume.value,
+    initialatata:initiala.value,
+    datanasterii:datanastere.value,
+    sex:sex.value,
+    studii:studii.value,
+    idfunctie:functie.value.value,
+    idcategorie:categorie.value.value,
+    angajator:angajator.value,
+    coddosar:numardosar.value.length>3?numardosar.value:false,
+    cuPrezentare
+  }
+  console.log(candidat)
+  axios.post(host+'candidati/candidatnou',candidat).then(
+    res=>{
+      if(res.data.candidat){
+                         $q.notify({
+                                  message:'Candidat adaugat cu succes!',
+                                  timeout:2000,
+                                  position:'top',
+                                  color:'positive'
+                                }) 
+                              
+                            reset();
+                            ultimiiCandidati();
+                        }
+                        else
+                        {
+                          $q.notify({
+                                  message:'Ceva nu a functionat!',
+                                  timeout:3000,
+                                  position:'top',
+                                  color:'negative'
+                                }) 
+                        }
+    }
+  ).catch(err=>{
+    console.log(err)
+  })
+
+}
+
+function reset(){
+  nume.value = ''
+ initiala.value = ''
+ prenume.value = ''
+ angajator.value = ''
+ numardosar.value=''
+ sex.value='Masculin'
+ studii.value = 'Studii universitare'
+ datanastere.value='1975/01/01'
+ categorie.value=state.categorii.length>0?state.categorii[0]:null
+
+ functie.value=state.functii.length>0?state.functii[0]:null
+ }
+ const  initialPagination = {
+
+        page: 1,
+        rowsPerPage: 10
+
+      }
+const columns = [
+
+  { name: 'nume', align: 'left', label: 'Nume prenume', field: 'nume', sortable: true },
+  { name: 'nrdosar', align: 'center', label: 'Numar dosar', field: 'nrdosar', sortable: true },
+  { name: 'datanastere', align: 'center', label: 'Data nasterii', field: 'datanastere', sortable: true },
+  { name: 'functie', align: 'left', label: 'Functie', field: 'functie', sortable: true },
+  { name: 'stare', align: 'left', label: 'Status', field: 'stare', sortable: true }
+
+  
 ]
+
+
 
 </script>
 <template>
 <div class="flex flex-center column" >
       <div class="text-h6 q-ma-md">Receptie candidati</div>
       <div class="row bg-blue-grey-1" style="min-height: 100vh; width: 90%; padding: 24px;">
-        <div id="parent" class="fit column justify-center items-center q-gutter-md" style="overflow: hidden;">
+        <div id="parent" class="q-pa-md fit column justify-center items-center q-gutter-md" >
           
-      <q-card class="no-border-radius" style="width:90%">
-      <div class="row q-gutter-md q-pa-md" >
-         <q-input class="col " label="Nume prenume" style="min-width:200px;"/>
-         <q-input  class="col " label="CNP / echivalent" style="min-width:200px;"/>
-         <q-input class="col " label="Categoria" style="min-width:200px;"/>
-         <q-input class="col " label="Angajator" style="min-width:200px;"/>
-      </div>
-      </q-card>
-    
-      <q-card class="no-border-radius" style="width:90%">
-        <div class="row q-gutter-md q-pa-md" >
-         <q-input class="col " label="SEX" style="min-width:200px;"/>
-         <q-input  class="col " label="Varsta" style="min-width:200px;"/>
-         <q-input class="col " label="Studii" style="min-width:200px;"/>
-         <q-input class="col " label="Data prezentare" style="min-width:200px;"/>
-      </div>
-      </q-card>
-    
-      <q-card class="border-radius q-mb-xl">
-        <q-card-section>
-            <div class="row q-gutter-md q-pa-xs" >
-                <q-btn color="primary" icon="mail" label="ADAUGA!" />
-                <q-btn color="primary" icon="mail" label="Reset" />
-             </div>
-        </q-card-section>
-      </q-card>
-   
-      <q-card class=" q-mt-xl no-border-radius">
-        <div class="q-pa-md">
-                <q-table
-                title="Treats"
-                :rows="rows"
-                :columns="columns"
-                row-key="name"
-                />
-        </div>
-      </q-card>
+          <q-tabs
+            v-model="tab"
+            dense
+            class="text-grey"
+            active-color="primary"
+            indicator-color="primary"
+            align="justify"
+            narrow-indicator
+            >
+              <q-tab name="nou" label="Candidat nou" />
+              <q-tab name="cauta" label="Cauta candidat" />
+          
+            </q-tabs>
+
+            <q-separator />
+
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel name="nou">
+                <q-card class="q-ma-md q-pa-md no-border-radius" style="width:900px">
+                      <div class="row q-gutter-md q-pa-md" >
+                        <q-input v-model="nume" class="col " label="Nume candidat" style="width:200px;"/>
+                        <q-input v-model="initiala" class="col " label="I.T." style="max-width:30px;"/>
+                        <q-input v-model="prenume" class="col " label="Prenume candidat" style="width:200px;"/>
+                        <q-input label="Data nastere" v-model="datanastere" mask="date" :rules="['date']" style="width:200px;">
+                          <template v-slot:append>
+                            <q-icon name="event" class="cursor-pointer">
+                              <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                                <q-date v-model="datanastere">
+                                  <div class="row items-center justify-end">
+                                    <q-btn v-close-popup label="Inchide" color="primary" flat />
+                                  </div>
+                                </q-date>
+                              </q-popup-proxy>
+                            </q-icon>
+                          </template>
+                        </q-input>
+                        
+                        <q-select v-model="studii" :options="optiunistudii" label="Nivel studii" style="width:200px;"/>
+                      </div>
+                      </q-card>
+                    
+                      <q-card class="q-ma-md q-pa-md no-border-radius" style="width:900px">
+                        <div class="row q-gutter-md q-pa-md" >
+                        <q-input v-model="numardosar" class="col " label="Numar dosar" style="width:200px;"/>
+                        <q-select v-model="sex" :options="optiunisex" class="col " label="SEX" style="max-width:100px;"/>
+                        <q-select  v-model="categorie" :options="state.categorii" class="col " label="Categorie" style="width:200px;"/>
+                        <q-select v-model="functie" :options="state.functii" class="col " label="Functie" style="width:200px;"/>
+                        <q-input v-model="angajator" class="col " label="Angajator" style="width:200px;"/>
+                      </div>
+                      </q-card>
+                    
+                      <q-card class="q-ma-md q-pa-xs border-radius ">
+                        <q-card-section>
+                            <div class="flex flex-center q-pa-xs" >
+                                <q-btn class="q-mr-xl" color="primary" icon="mail" label="ADAUGA CANDIDAT!" @click="adaugaCandidat"/>
+                                <q-btn class="q-mr-xl" color="primary" icon="mail" label="ADAUGA CANDIDAT + PREZENTARE" @click="adaugaCandidat(true)"/>
+                                <q-btn color="primary" icon="mail" label="Reset" @click="reset"/>
+                            </div>
+                        </q-card-section>
+                      </q-card>
+                  
+                      <q-card class=" q-mt-xl no-border-radius">
+                        <div class="q-pa-md">
+                                <q-table
+                                dense
+                                title="Candidati"
+                                :rows="state.candidati" 
+                                :columns="columns"
+                                :pagination="initialPagination"
+                                row-key="id"
+                                />
+                        </div>
+                      </q-card>
+              </q-tab-panel>
+
+              <q-tab-panel name="cauta">
+                <div class="text-h6">Alarms</div>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              </q-tab-panel>
+
+              
+            </q-tab-panels>
+
+     
   
         </div>
       </div>

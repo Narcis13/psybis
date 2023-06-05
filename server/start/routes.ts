@@ -28,3 +28,12 @@ Route.get('/', async () => {
 Route.post('/registeruser','AuthController.register');
 Route.post('/login','AuthController.login')
 Route.post('/logout','AuthController.logout')
+
+Route.get('candidati/toatecategoriile','CandidatsController.toatecategoriile')
+Route.get('candidati/toatefunctiile','CandidatsController.toatefunctiile')
+Route.post('candidati/candidatnou','CandidatsController.candidatnou')
+Route.get('candidati/ultimii','CandidatsController.ultimiiCandidati')
+Route.get('prezentari/azi','PrezentarisController.prezentarileZilei')
+Route.post('prezentari/alocareteste','PrezentarisController.alocareteste')
+Route.get('testari/azi','TestarisController.testarilezilei')
+Route.get('testari/:id','TestarisController.unidentificator')

@@ -1,4 +1,5 @@
 import { Scene } from 'phaser'
+import {useCandidatStore} from '@/store/StoreCandidat'
 import eventsCenter from './EventsCenter'
 import sky from '@/game/assets/sky.png'
 //import bomb from '@/game/assets/bomb.png'
@@ -7,12 +8,15 @@ import thudMp3 from '@/game/assets/thud.mp3'
 import thudOgg from '@/game/assets/thud.ogg'
 import Cadrane from './Cadrane'
 
+
+
 export default class BootScene extends Scene {
   
-  testdata={}
-  
+  testdata={};
+
   constructor () {
     super({ key: 'BootScene' })
+    this.candidat = useCandidatStore()
     console.log('Boot scene created')
     this.testdata.items=[
       /*{
@@ -45,7 +49,7 @@ export default class BootScene extends Scene {
   }
 
   create () {
-
+  //  this.text = this.add.text(100, 50, 'Nume: '+this.candidat.numecandidat);
 
  eventsCenter.emit('date-sosite',this.testdata.items) 
    const btn= this.add.image(800,1000,'buton_start')
@@ -53,11 +57,11 @@ export default class BootScene extends Scene {
    btn.setInteractive()
 
    btn.on('pointerdown',()=>{
-   
+   console.log(this.candidat.numecandidat)
     //this.scene.run('PlayScene')
     this.scene.add('cadrane',Cadrane,true,{
-      durataRepriza:60000,
-      durataAntrenament:60000,
+      durataRepriza:12000,
+      durataAntrenament:12000,
       instructiuni:[{
         text:'Priviti ecranul, observati existenta unor cadrane care au pe margine zone mai inchise la culoare. Intre cadrane se afla o banda albastra'
       },

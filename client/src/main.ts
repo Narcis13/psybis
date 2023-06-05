@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-
+import {createPinia} from 'pinia'
 //createApp(App).mount('#app')
 
 //import { createApp } from 'vue'
@@ -42,6 +42,6 @@ myApp.use(Quasar, {
   }
   */
 })
-
+myApp.use(createPinia())
 // Assumes you have a <div id="app"></div> in your index.html
 myApp.mount('#app')

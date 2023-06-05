@@ -1,4 +1,5 @@
 import { Scene } from 'phaser'
+import {useCandidatStore} from '@/store/StoreCandidat'
 import CountdownController from '@/game/scenes/helpers/CountdownController'
 import meter_light from '@/game/assets/meter_light.png'
 import butonmaideparte from '@/game/assets/maideparte.png'
@@ -21,7 +22,8 @@ export default class Cadrane extends Scene {
     countdown;
     constructor(){
         super({ key: 'cadrane' })
-        console.log('Scena cadrane constructor')
+       // console.log('Scena cadrane constructor')
+       this.candidat=useCandidatStore()
         this.moment=0
         this.index_instructaj=0;
         this.mesajetaste=[null,null,null]
@@ -50,7 +52,7 @@ export default class Cadrane extends Scene {
     }
 
     init(config){
-        console.log('Init Cadrane',config)
+      //  console.log('Init Cadrane',config)
         this.config=config;
     }
 
@@ -233,7 +235,7 @@ export default class Cadrane extends Scene {
                 console.dir(event);
 
                 if(this.status.stadiu=='REPRIZA I'||this.status.stadiu=='REPRIZA II'&&this.status.ruleaza){
-                    if(event.keyCode!==32||event.keyCode!==37||event.keyCode!==38||event.keyCode!==39){
+                    if(event.keyCode!==32&&event.keyCode!==37&&event.keyCode!==38&&event.keyCode!==39){
                         this.evenimente.totalApasariIncorecte+=1
                     }
                     
@@ -280,7 +282,7 @@ export default class Cadrane extends Scene {
     }
 
     handleCountdownFinished(){
-        console.log('GATA',this.totalstimuli.cadran_sus,this.totalstimuli.cadran_stanga,this.totalstimuli.cadran_dreapta,this.totalstimuli.bara,this.evenimente)
+      //  console.log('GATA',this.totalstimuli.cadran_sus,this.totalstimuli.cadran_stanga,this.totalstimuli.cadran_dreapta,this.totalstimuli.bara,this.evenimente)
         this.status.ruleaza=false;
         if(this.status.stadiu=='ANTRENAMENT'){
             this.mesaj.setX(200)
@@ -305,6 +307,10 @@ export default class Cadrane extends Scene {
             this.mesaj.setText('FINAL! VA MULTUMIM!')
             this.evenimente.stopTest=Date.now()
             this.evenimente.totalApasariIncorecte=this.evenimente.totalApasariIncorecte-2
+            setTimeout(() => {
+                this.candidat.finalizareTest(this.evenimente)
+              }, 4000);
+           
         }
     }
 

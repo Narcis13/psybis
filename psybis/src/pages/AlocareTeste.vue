@@ -1,241 +1,239 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref , reactive} from 'vue'
+import axios from 'axios'
+import {useUtilizatorStore} from '../stores/StoreUtilizator'
+const UtilizatorStore = useUtilizatorStore()
+const  initialPagination = {
 
-let check1=ref(false)
-let check2=ref(false)
-let check3=ref(false)
+page: 1,
+rowsPerPage: 10
+
+}
+
+const host=import.meta.env.VITE_HOST
+const state = reactive(
+ { 
+  testedisponibile:[
+          {
+            id:1,
+            denumire: 'Test RSD',
+            selectat:false
+          },
+          { 
+            id:2,
+            denumire: 'Chestionar 1',
+            selectat:false
+          },
+          {
+            id:3,
+            denumire: 'Chestionar 2',
+            selectat:false
+          }
+],
+    candidatiprezenti:[],
+    alocariteste:[]
+}
+)
+
+function candidatiPrezenti(){
+  state.candidatiprezenti=[]
+  axios.get(host+'prezentari/azi').then(
+  res=>{
+     console.log('prezentarile',res.data.prezentarile[0])
+     res.data.prezentarile[0].map(c=>{
+      c.selectat=false;
+      state.candidatiprezenti.push(c)
+     })
+
+  }
+).catch(err=>{
+  console.log(err)
+})
+}
+
+candidatiPrezenti();
+
+function alocarileDeAzi(){
+  state.alocariteste=[]
+  axios.get(host+'testari/azi').then(
+  res=>{
+     
+     res.data.testarile[0].map(t=>{
+      
+      state.alocariteste.push(t)
+     })
+
+  }
+).catch(err=>{
+  console.log(err)
+})
+}
+
+alocarileDeAzi();
 
 const columns = [
-  {
-    name: 'name',
-    required: true,
-    label: 'Dessert (100g serving)',
-    align: 'left',
-    field: row => row.name,
-    format: val => `${val}`,
-    sortable: true
-  },
-  { name: 'calories', align: 'center', label: 'Calories', field: 'calories', sortable: true },
-  { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
-  { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
-  { name: 'protein', label: 'Protein (g)', field: 'protein' },
-  { name: 'sodium', label: 'Sodium (mg)', field: 'sodium' },
-  { name: 'calcium', label: 'Calcium (%)', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-  { name: 'iron', label: 'Iron (%)', field: 'iron', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
+
+  { name: 'nume', align: 'left', label: 'Nume prenume', field: 'nume', sortable: true },
+  { name: 'test', label: 'Test/Chestionar', field: 'numetest', sortable: true },
+  { name: 'nrdosar', label: 'Numar dosar', field: 'nrdosar', sortable: true  },
+  { name: 'datatest', label: 'Data test', field: 'datatest' },
+  { name: 'identificator', label: 'Identificator ', field: 'identificator' }
+
 ]
+
+function genIdentificator(){
+
+  var nt= Math.floor(10000000 + Math.random() * 90000000)
+  return nt.toString(36)
+}
+
+function alocareteste(){
+  var azi = (new Date()).toISOString().split('T')[0]
+
+let alocari=[]
+   state.candidatiprezenti.map(c=>{
+      if(c.selectat){
+        state.testedisponibile.map(t=>{
+          if(t.selectat){
+            alocari.push({
+              idcandidat:c.idcandidat,
+              idtest:t.id,
+              iduser:UtilizatorStore.id,
+              datatest:azi, 
+              idprezentare:c.idprezentare,
+              numetest:t.denumire, 
+              identificator:genIdentificator()
+            })
+          }
+        })
+      }
+
+   })
+
+   //console.log('Alocare teste',alocari)
+   axios.post(host+'prezentari/alocareteste',alocari).then(
+    res=>{
+      alocarileDeAzi()
+      state.candidatiprezenti.map(c=>{
+      c.selectat=false
+   })
+
+      state.testedisponibile.map(t=>{
+      t.selectat=false
+    })
+    }
+   ).catch(err=>{
+    console.log(err)
+   })
+
+
+
+}
 
 const rows = [
-  {
-    name: 'Frozen Yogurt',
-    calories: 159,
-    fat: 6.0,
-    carbs: 24,
-    protein: 4.0,
-    sodium: 87,
-    calcium: '14%',
-    iron: '1%'
-  },
-  {
-    name: 'Ice cream sandwich',
-    calories: 237,
-    fat: 9.0,
-    carbs: 37,
-    protein: 4.3,
-    sodium: 129,
-    calcium: '8%',
-    iron: '1%'
-  },
-  {
-    name: 'Eclair',
-    calories: 262,
-    fat: 16.0,
-    carbs: 23,
-    protein: 6.0,
-    sodium: 337,
-    calcium: '6%',
-    iron: '7%'
-  },
-  {
-    name: 'Cupcake',
-    calories: 305,
-    fat: 3.7,
-    carbs: 67,
-    protein: 4.3,
-    sodium: 413,
-    calcium: '3%',
-    iron: '8%'
-  },
-  {
-    name: 'Gingerbread',
-    calories: 356,
-    fat: 16.0,
-    carbs: 49,
-    protein: 3.9,
-    sodium: 327,
-    calcium: '7%',
-    iron: '16%'
-  },
-  {
-    name: 'Jelly bean',
-    calories: 375,
-    fat: 0.0,
-    carbs: 94,
-    protein: 0.0,
-    sodium: 50,
-    calcium: '0%',
-    iron: '0%'
-  },
-  {
-    name: 'Lollipop',
-    calories: 392,
-    fat: 0.2,
-    carbs: 98,
-    protein: 0,
-    sodium: 38,
-    calcium: '0%',
-    iron: '2%'
-  },
-  {
-    name: 'Honeycomb',
-    calories: 408,
-    fat: 3.2,
-    carbs: 87,
-    protein: 6.5,
-    sodium: 562,
-    calcium: '0%',
-    iron: '45%'
-  },
-  {
-    name: 'Donut',
-    calories: 452,
-    fat: 25.0,
-    carbs: 51,
-    protein: 4.9,
-    sodium: 326,
-    calcium: '2%',
-    iron: '22%'
-  },
-  {
-    name: 'KitKat',
-    calories: 518,
-    fat: 26.0,
-    carbs: 65,
-    protein: 7,
-    sodium: 54,
-    calcium: '12%',
-    iron: '6%'
-  }
+
 ]
+
+
 </script>
 <template>
-    <div class="flex flex-center column " >
-        <div class="text-h6 q-ma-md ">Alocare teste</div>
+    <q-page class=" column items-center justify-start q-gutter-sm " >
+        <div class=" col-1 text-h6 q-ma-sm ">Alocare teste</div>
             <!-- <div class="flex flex-center q-pa-md" style="width: 1024px"> -->
-                <div class="row q-gutter-xl justify-center " >
-                    <q-list class="col-4" bordered padding >
+                <div  style="width: 900px;height:400px">
+                      <div class="row justify-center" >
 
-                        <q-item-label header>Teste disponibile</q-item-label>
-                        <q-item tag="label" v-ripple>
-                                <q-item-section side top>
-                                <q-checkbox v-model="check1" />
-                                </q-item-section>
+                        <div class=" col-5">
 
-                                <q-item-section>
-                                <q-item-label>Notifications</q-item-label>
-                                <q-item-label caption>
-                                    Notify me about updates to apps or games that I downloaded
-                                </q-item-label>
-                                </q-item-section>
-                            </q-item>
+                          <q-scroll-area style="height:380px"> 
+                            <q-list  bordered padding >
 
-                            <q-item tag="label" v-ripple>
-                                <q-item-section side top>
-                                <q-checkbox v-model="check2" />
-                                </q-item-section>
+                              <q-item-label header>Teste disponibile</q-item-label>
+                              <q-item v-for="test in state.testedisponibile"  :key="test.id" tag="label" v-ripple>
+                                      <q-item-section side top>
+                                      <q-checkbox v-model="test.selectat" />
+                                      </q-item-section>
 
-                                <q-item-section>
-                                <q-item-label>Sound</q-item-label>
-                                <q-item-label caption>
-                                    Auto-update apps at anytime. Data charges may apply
-                                </q-item-label>
-                                </q-item-section>
-                            </q-item>
+                                      <q-item-section>
+                                      <q-item-label>{{ test.denumire }}</q-item-label>
 
-                            <q-item tag="label" v-ripple>
-                                <q-item-section side top>
-                                <q-checkbox v-model="check3" />
-                                </q-item-section>
+                                      </q-item-section>
+                                  </q-item>
 
-                                <q-item-section>
-                                <q-item-label>Auto-add widgets</q-item-label>
-                                <q-item-label caption>
-                                    Automatically add home screen widgets
-                                </q-item-label>
-                                </q-item-section>
-                            </q-item>
-                        
-                    </q-list>
 
-                    <div class="column justify-center" style="height:400px">
-                        <q-btn class="" color="purple" label="Aloca -->" />
-                    </div>
-                    
-                    <q-list class="col-4" bordered padding >
 
-                            <q-item-label header>Candidati prezenti</q-item-label>
-                            <q-item tag="label" v-ripple>
-                                    <q-item-section side top>
-                                    <q-checkbox v-model="check1" />
-                                    </q-item-section>
+                              </q-list>
+                          </q-scroll-area>
+                        </div>
 
-                                    <q-item-section>
-                                    <q-item-label>Notifications</q-item-label>
-                                    <q-item-label caption>
-                                        Notify me about updates to apps or games that I downloaded
-                                    </q-item-label>
-                                    </q-item-section>
-                                </q-item>
 
-                                <q-item tag="label" v-ripple>
-                                    <q-item-section side top>
-                                    <q-checkbox v-model="check2" />
-                                    </q-item-section>
+                          <div class="column col-auto justify-center" style="height:300px">
+                            <q-btn class="q-mx-sm" color="purple" label="Aloca -->"  @click="alocareteste"/>
+                          </div>
 
-                                    <q-item-section>
-                                    <q-item-label>Sound</q-item-label>
-                                    <q-item-label caption>
-                                        Auto-update apps at anytime. Data charges may apply
-                                    </q-item-label>
-                                    </q-item-section>
-                                </q-item>
 
-                                <q-item tag="label" v-ripple>
-                                    <q-item-section side top>
-                                    <q-checkbox v-model="check3" />
-                                    </q-item-section>
+                           <div class=" col-5" >
+                            <q-scroll-area style="height:380px"> 
+                            <q-list class="" bordered padding >
 
-                                    <q-item-section>
-                                    <q-item-label>Auto-add widgets</q-item-label>
-                                    <q-item-label caption>
-                                        Automatically add home screen widgets
-                                    </q-item-label>
-                                    </q-item-section>
-                                </q-item>
+                                  <q-item-label header>Candidati prezenti</q-item-label>
+                                  <q-item v-for="candidat in state.candidatiprezenti" tag="label" :key="candidat.idprezentare" v-ripple>
+                                          <q-item-section side top>
+                                          <q-checkbox v-model="candidat.selectat" />
+                                          </q-item-section>
 
-                    </q-list>    
+                                          <q-item-section>
+                                          <q-item-label>{{candidat.nume}}</q-item-label>
+                                          <q-item-label caption>
+                                              Dosar: {{ candidat.nrdosar }}
+                                          </q-item-label>
+                                          </q-item-section>
+                                      </q-item>
+
+
+
+                                  </q-list>   
+                                  </q-scroll-area>
+                           </div>
+
+                         
+                      </div>
+                   
+  
+                 
+                 
                 </div>
 
-                <div class="q-pa-md">
+                <div class=" col-6 q-pa-md" style="width: 900px">
                     <q-table
-                        title="Treats"
-                        :rows="rows"
+                        
+                        :pagination="initialPagination"
+                        :rows="state.alocariteste"
                         :columns="columns"
                         row-key="name"
-                    />
+                    >
+
+                    <template v-slot:top>
+                                <div class="q-pa-sm text-h6">Alocari teste</div>
+                                
+                               
+                                <div class="flex" style="min-width:200px;max-height:100px;">
+                                    <q-btn   class="q-ma-sm"  round color="red" icon="remove" >
+                                        <q-tooltip class="bg-accent">Sterge</q-tooltip>
+                                    </q-btn>
+
+
+                                
+
+                                </div>
+
+                             </template>
+                    
+                  </q-table>
                 </div>
 
             <!-- </div> -->
-    </div>
+    </q-page>
    
 </template>
 
