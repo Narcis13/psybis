@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import {createPinia} from 'pinia'
+import VueApexCharts from "vue3-apexcharts";
 //createApp(App).mount('#app')
 
 //import { createApp } from 'vue'
@@ -43,5 +44,6 @@ myApp.use(Quasar, {
   */
 })
 myApp.use(createPinia())
+myApp.use(VueApexCharts);
 // Assumes you have a <div id="app"></div> in your index.html
 myApp.mount('#app')

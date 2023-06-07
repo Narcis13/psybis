@@ -4,7 +4,18 @@ const props=defineProps(['title','evenimente'])
 const suntEvenimente = computed(()=>{
     return props.evenimente.lista&&props.evenimente.lista.length>0
 })
-
+  let options={
+    chart: {
+          id: 'vuechart-example'
+        },
+        xaxis: {
+          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+        }
+  }
+  let series=[{
+        name: 'series-1',
+        data: [30, 40, 45, 50, 49, 60, 70, 91]
+      }]
 let state = reactive ({
    rezultate:{
     durataStartTest:0
@@ -56,6 +67,9 @@ onUpdated(()=>{
     </div>
     <div>
        Timp mediu reactie cadran sus: {{ state.rezultate.timp_mediu_reactie_cadran_sus }} ms. 
+    </div>
+    <div>
+        <apexchart width="500" type="bar" :options="options" :series="series"></apexchart>
     </div>
     </div>
 
