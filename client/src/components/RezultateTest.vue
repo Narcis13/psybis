@@ -4,23 +4,28 @@ const props=defineProps(['title','evenimente'])
 const suntEvenimente = computed(()=>{
     return props.evenimente.lista&&props.evenimente.lista.length>0
 })
-  let options={
-    chart: {
-          id: 'vuechart-example'
-        },
-        xaxis: {
-          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
-        }
-  }
-  let series=[{
-        name: 'series-1',
-        data: [30, 40, 45, 50, 49, 60, 70, 91]
-      }]
+
 let state = reactive ({
    rezultate:{
     durataStartTest:0
    } 
 }) 
+let states={
+    grafic_cadran_sus:{
+                     options:{
+                            chart: {
+                                    id: 'grafic_cadran_sus'
+                                 },
+                                xaxis: {
+                                    categories: []
+                                }
+                         },
+                         series:[{
+                                 name: 'timp_reactie_cadran_sus',
+                                 data: []
+                           }]
+                     }
+}
 
 onUpdated(()=>{
     
@@ -28,12 +33,16 @@ onUpdated(()=>{
     let reactii_inutile_cadran_sus=0
     let timp_reactie_cadran_sus=0
     let timpi_reactie_cadran_sus=[]
+    let indecsi_reactie_cadran_sus=[]
+
     if(props.evenimente.lista){
         props.evenimente.lista.map(e=>{
             if(e.reactie=='corect'&&e.element=='cadran_sus') {
                 reactii_cadran_sus+=1
                 timp_reactie_cadran_sus+=(e.momentReactie-e.startStimul)
                 timpi_reactie_cadran_sus.push(Math.floor(e.momentReactie-e.startStimul))
+                indecsi_reactie_cadran_sus.push(timpi_reactie_cadran_sus.length)
+
             }
 
             if(e.reactie=='inutil'&&e.element=='cadran_sus') reactii_inutile_cadran_sus+=1
@@ -43,6 +52,9 @@ onUpdated(()=>{
         state.rezultate.exactitate_reactii_cadran_sus = (reactii_cadran_sus/(props.evenimente.totalStimuliReprizaI[0]+props.evenimente.totalStimuliReprizaII[0])*100).toFixed(2)
         state.rezultate.reactii_inutile_cadran_sus = reactii_inutile_cadran_sus
         state.rezultate.timp_mediu_reactie_cadran_sus = Math.floor(timp_reactie_cadran_sus/reactii_cadran_sus)
+
+        states.grafic_cadran_sus.options.xaxis.categories=indecsi_reactie_cadran_sus;
+        states.grafic_cadran_sus.series[0].data=timpi_reactie_cadran_sus;
     }
     console.log('updated',timpi_reactie_cadran_sus)
 })
@@ -69,7 +81,7 @@ onUpdated(()=>{
        Timp mediu reactie cadran sus: {{ state.rezultate.timp_mediu_reactie_cadran_sus }} ms. 
     </div>
     <div>
-        <apexchart width="500" type="bar" :options="options" :series="series"></apexchart>
+        <apexchart width="400" type="line" :options="states.grafic_cadran_sus.options" :series="states.grafic_cadran_sus.series"></apexchart>
     </div>
     </div>
 
