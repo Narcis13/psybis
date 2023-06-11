@@ -84,7 +84,7 @@ export default class BootScene extends Scene {
         centruY:300,
         razaMare:180,
         razaMica:140,
-        segmente:[{start:34,stop:83},{start:115,stop:145},{start:175,stop:230},{start:280,stop:330}],
+        segmente:[{start:40,stop:70},{start:113,stop:143},{start:170,stop:200},{start:235,stop:270},{start:280,stop:290},{start:330,stop:12}],
         viteza:0.01
       },
       {
@@ -93,7 +93,7 @@ export default class BootScene extends Scene {
         centruY:620,
         razaMare:180,
         razaMica:140,
-        segmente:[{start:20,stop:70},{start:180,stop:255}],
+        segmente:[{start:0,stop:90},{start:165,stop:212},{start:250,stop:290}],
         viteza:-0.008
       },
       {
@@ -102,7 +102,7 @@ export default class BootScene extends Scene {
         centruY:620,
         razaMare:180,
         razaMica:140,
-        segmente:[{start:42,stop:52},{start:110,stop:125},{start:280,stop:320}],
+        segmente:[{start:20,stop:45},{start:75,stop:155},{start:210,stop:280},{start:330,stop:360}],
         viteza:-0.006
       }],
       bara:{

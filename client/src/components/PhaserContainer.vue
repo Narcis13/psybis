@@ -5,6 +5,8 @@ import axios from 'axios'
 import type { Game } from 'phaser'
 import RezultateTest from './RezultateTest.vue'
 import {useCandidatStore} from '@/store/StoreCandidat'
+import eventsCenter from '../game/scenes/EventsCenter.js'
+
 
 let gameInstance: Game | null = null
 const containerId = 'game-container'
@@ -13,6 +15,13 @@ const host=import.meta.env.VITE_HOST
 const candidat= useCandidatStore()
 let testinceput = ref(false)
 let idinvalid = ref(false)
+
+function resetTest(){
+  candidat.poateFiResetat=!candidat.poateFiResetat
+  candidat.resetareTest()
+  eventsCenter.emit('reset',{}) 
+}
+
 function cautaIdentificator(){
 
   axios.get(host+'testari/'+identificator.value).then(
@@ -61,7 +70,7 @@ onUnmounted(() => {
     </div>
   
       <template v-slot:action>
-        <q-btn flat color="white" label="Instructiuni" />
+        <q-btn v-show="candidat.poateFiResetat" flat color="white" label="Reset" @click="resetTest"/>
         <q-btn flat color="white" label="Solicita ajutor!" />
       </template>
     </q-banner>

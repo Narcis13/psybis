@@ -1,14 +1,16 @@
 import { Scene } from 'phaser'
+import eventsCenter from './EventsCenter'
 import {useCandidatStore} from '@/store/StoreCandidat'
 import CountdownController from '@/game/scenes/helpers/CountdownController'
 import meter_light from '@/game/assets/meter_light.png'
 import butonmaideparte from '@/game/assets/maideparte.png'
 import sageti from '@/game/assets/sageti.png'
 import bomb from '@/game/assets/stea.png'
-
+import BootScene from './BootScene'
 export default class Cadrane extends Scene {
     config;
     text;
+    btn;
     mesaj;
     points;
     lines;
@@ -24,6 +26,8 @@ export default class Cadrane extends Scene {
         super({ key: 'cadrane' })
        // console.log('Scena cadrane constructor')
        this.candidat=useCandidatStore()
+       
+        this.scaleaza=null
         this.moment=0
         this.index_instructaj=0;
         this.mesajetaste=[null,null,null]
@@ -70,7 +74,7 @@ export default class Cadrane extends Scene {
                 this.mesajetaste[0].setVisible(false)
                 this.mesajetaste[1].setVisible(false)
                 this.mesajetaste[2].setVisible(false)
-
+                this.candidat.poateFiResetat=true
                 this.mesaj.setX(100)
                this.mesaj.setWordWrapWidth(1400)
               // this.time.removeAllEvents();
@@ -84,7 +88,7 @@ export default class Cadrane extends Scene {
             }
             this.mesaj.setText(this.config.instructiuni[this.index_instructaj].text);
             if(this.config.instructiuni[this.index_instructaj].subtextstanga){
-                console.log('SUBTEXT STANGA')
+               // console.log('SUBTEXT STANGA')
                 this.mesajetaste[0] = this.add.text(50, 950, this.config.instructiuni[this.index_instructaj].subtextstanga, { font: "32px Arial", color: '#add8e6', align: "left" ,wordWrap:{width:500}});
                 this.mesajetaste[1] = this.add.text(550, 950, this.config.instructiuni[this.index_instructaj].subtextdreapta, { font: "32px Arial", color: '#add8e6', align: "left" ,wordWrap:{width:450}});
                 this.mesajetaste[2] = this.add.image(1050, 1000, 'sageti')
@@ -149,24 +153,44 @@ export default class Cadrane extends Scene {
 
        })
     }
+    
+    resetTest(){
+        console.log('reset test!')
+        this.countdown.stop()
+        this.time.removeAllEvents()
+        this.status.stadiu='INSTRUCTAJ'
+        this.mesaj.setX(50)
+        this.mesaj.setWordWrapWidth(1000)
+        this.mesaj.setY(900)
+        
+        this.mesaj.setAlign('left')
+        this.index_instructaj=0
+        this.status.ruleaza=true
+        if (this.status.ruleaza) this.time.delayedCall(this.config.bara.pauza, this.scaleaza, [], this);
+        this.btn.setVisible(true)
+        let ultima = this.index_instructaj==this.config.instructiuni.length-1 ? true:false
+        if(this.index_instructaj==this.config.instructiuni.length-2) this.status.ruleaza=false
+        if (ultima) this.btn.setVisible(false)
+        this.creezInstructaj(ultima)
+    }
 
     create(){
         this.input.setDefaultCursor('url(cursors/blue.cur), pointer');
-        const btn= this.add.image(1300,950,'buton_maideparte')
-        btn.on('pointerover', function (event)
+      this.btn= this.add.image(1300,950,'buton_maideparte')
+        this.btn.on('pointerover', function (event)
         {
 
             this.setTint(0xff0000);
 
         });
 
-        btn.on('pointerout', function (event)
+        this.btn.on('pointerout', function (event)
         {
 
             this.clearTint();
 
         });
-        btn.setInteractive()
+        this.btn.setInteractive()
         
 
         this.mesaj = this.add.text(50, 900, this.config.instructiuni[this.index_instructaj].text, { font: "40px Arial", color: '#add8e6', align: "left" ,wordWrap:{width:1000}});
@@ -177,35 +201,38 @@ export default class Cadrane extends Scene {
 
        var fundal_meter=this.add.rectangle(this.config.bara.x,this.config.bara.y,50*this.config.bara.scalare,50,0x0000ff)
        fundal_meter.setOrigin(0.0,0.5)
+       this.status.ruleaza=true;
+
        var meter=this.add.image(this.config.bara.x,this.config.bara.y,"meter");
        meter.setOrigin(0.0,0.5)
        meter.scaleX=0
        this.bara=meter;
        var that=this
        function startScaling() {
-       if(that.stimuli[3]===null) {
-        that.stimuli[3]={startStimul:that.moment,murdar:false}
-        that.totalstimuli.bara+=1;
-       }
-        // Create the scaling tween
-        var scaleTween = this.tweens.add({
-            targets: meter,
-            scaleX: that.config.bara.scalare,
-            duration: that.config.bara.durata, // 3 seconds
-            ease: 'Linear',
-            onComplete: function () {
-                // After scaling, reset the scale and start the next scaling tween after a delay
-                meter.scaleX=0.0;
-                that.stimuli[3]=null;
-               if (that.status.ruleaza) that.time.delayedCall(that.config.bara.pauza, startScaling, [], that);
-            },
-            onCompleteScope: that
-        });
+                    if(that.stimuli[3]===null) {
+                        that.stimuli[3]={startStimul:that.moment,murdar:false}
+                        that.totalstimuli.bara+=1;
+                    }
+                    // Create the scaling tween
+                    var scaleTween = this.tweens.add({
+                        targets: meter,
+                        scaleX: that.config.bara.scalare,
+                        duration: that.config.bara.durata, // 3 seconds
+                        ease: 'Linear',
+                        onComplete: function () {
+                            // After scaling, reset the scale and start the next scaling tween after a delay
+                            meter.scaleX=0.0;
+                            that.stimuli[3]=null;
+                        if (that.status.ruleaza) that.time.delayedCall(that.config.bara.pauza, startScaling, [], that);
+                        },
+                        onCompleteScope: that
+                    });
         }
-        this.time.delayedCall(this.config.bara.pauza, startScaling, [], this);
+        if (this.status.ruleaza) this.time.delayedCall(this.config.bara.pauza, startScaling, [], this);
+        this.scaleaza=startScaling;
         this.countdown = new CountdownController(this, this.text)
-        this.status.ruleaza=true;
-        btn.on('pointerdown',()=>{
+        
+        this.btn.on('pointerdown',()=>{
            // asta e valabil dupa instructaj 
           /*  this.status.ruleaza=true 
             this.countdown.start(this.handleCountdownFinished.bind(this),this.config.durataRepriza)
@@ -214,7 +241,8 @@ export default class Cadrane extends Scene {
             btn.setVisible(false)*/
             this.index_instructaj+=1
             let ultima = this.index_instructaj==this.config.instructiuni.length-1 ? true:false
-            if (ultima) btn.setVisible(false)
+            if(this.index_instructaj==this.config.instructiuni.length-2) this.status.ruleaza=false
+            if (ultima) this.btn.setVisible(false)
             this.creezInstructaj(ultima)
             
         })
@@ -255,6 +283,8 @@ export default class Cadrane extends Scene {
                 }
 
                 if(this.status.stadiu=='ANTRENAMENT'&&event.keyCode==67&&!this.status.ruleaza){
+                    //console.log(this.stimuli)
+                    this.candidat.poateFiResetat=false
                     this.evenimente.startReprizaI=Date.now()
                     this.evenimente.lista=[]
                     this.resetCadrane()
@@ -278,7 +308,7 @@ export default class Cadrane extends Scene {
 
 
             });
-
+            eventsCenter.on('reset',this.resetTest,this)
     }
 
     handleCountdownFinished(){
@@ -290,6 +320,7 @@ export default class Cadrane extends Scene {
             this.totalstimuli.cadran_stanga=0
             this.totalstimuli.cadran_dreapta=0
             this.totalstimuli.bara=0
+            this.evenimente.stopAntrenament=Date.now()
             this.mesaj.setText('Pentru a incepe prima repriza a testului apasati tasta C')
         }
         if(this.status.stadiu=='REPRIZA I'){
@@ -299,6 +330,7 @@ export default class Cadrane extends Scene {
             this.totalstimuli.cadran_sus=0
             this.totalstimuli.cadran_stanga=0
             this.totalstimuli.cadran_dreapta=0
+            this.evenimente.stopReprizaI=Date.now()
             this.totalstimuli.bara=0
         }
         if(this.status.stadiu=='REPRIZA II'){
@@ -309,12 +341,15 @@ export default class Cadrane extends Scene {
             this.evenimente.totalApasariIncorecte=this.evenimente.totalApasariIncorecte-2
             setTimeout(() => {
                 this.candidat.finalizareTest(this.evenimente)
+                this.scene.switch(BootScene)
+                this.scene.remove()
               }, 4000);
            
         }
     }
 
     resetCadrane(){
+        this.stimuli=[null,null,null,null]
         for (let i = 0; i < this.lines.length; i++)
         { 
             var angle = Phaser.Geom.Line.Angle(this.lines[i]);
@@ -349,10 +384,14 @@ export default class Cadrane extends Scene {
                         this.config.cadrane[i].segmente.map(s=>{
                            if(Math.round(unghi)==s.stop && this.stimuli[i]===null){
                                this.stimuli[i]={startStimul:time,murdar:false}
-                               if(i==1) this.totalstimuli.cadran_stanga+=1;
+                               if(i==1){
+                             //   console.log('start stanga')
+                                this.totalstimuli.cadran_stanga+=1;
+                               } 
                                if(i==2) this.totalstimuli.cadran_dreapta+=1;
                            }
                            if(Math.round(unghi)==s.start && this.stimuli[i]!==null){
+                           // console.log('stop stanga')
                             this.stimuli[i]=null;
                            }
                         })
@@ -360,11 +399,13 @@ export default class Cadrane extends Scene {
                     else {
                         this.config.cadrane[i].segmente.map(s=>{
                             if(Math.round(unghi)==s.start && this.stimuli[i]===null){
+                              //  if(s.start==330) console.log('start sus')
                                 this.stimuli[i]={startStimul:time,murdar:false}
                                 if(i==0) this.totalstimuli.cadran_sus+=1;
                                 
                             }
                             if(Math.round(unghi)==s.stop && this.stimuli[i]!==null){
+                              // if(s.stop==12)  console.log('stop sus')
                              this.stimuli[i]=null;
                             }
                          })
@@ -409,7 +450,7 @@ export default class Cadrane extends Scene {
         }
 
         if (this.status.stadiu!=='INSTRUCTAJ'&&Phaser.Input.Keyboard.JustDown(this.sus)){
-            //console.log('sus')
+           // console.log('sus',this.stimuli[0],unghiuri[0])
             this.evenimente.lista.push({
                 stadiu:this.status.stadiu,
                 startStimul:this.stimuli[0]!==null?this.stimuli[0].startStimul:0,

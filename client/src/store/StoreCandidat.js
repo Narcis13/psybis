@@ -5,6 +5,8 @@ export const useCandidatStore = defineStore('candidatStore',{
        numecandidat:'',
        numetest:'',
        testInceput:false,
+       poateFiResetat:false,
+       eResetat:false,
        evenimenteTest:[]
     }),
     actions:{
@@ -21,6 +23,10 @@ export const useCandidatStore = defineStore('candidatStore',{
             this.numecandidat=''
             this.numetest=''
             
+        },
+        resetareTest(){
+            this.poateFiResetat=false
+            if(!this.eResetat) this.eResetat=true
         }
     }
 })

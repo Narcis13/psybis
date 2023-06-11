@@ -15,17 +15,19 @@ onUpdated(()=>{
 </script>
 
 <template>
-    <h5 v-show="!suntEvenimente">{{ title }} </h5>
-    <div class="column" v-show="suntEvenimente">
-        <!-- <div >
-            {{ state.rezultate.durataStartTest }} s.
+    <div>
+        <h5 v-show="!suntEvenimente">{{ title }} </h5>
+        <div v-show="suntEvenimente" class="row q-gutter-md justify-center" style="width:1210px">
+           <div class="column">
+            <widget-rezultate element="complet"  :evenimente="props.evenimente" />
+           </div>
+           <div class="column" >
+            <widget-rezultate element="cadran_sus"  :evenimente="props.evenimente" />
+            <widget-rezultate element="cadran_stanga"  :evenimente="props.evenimente" />
+            <widget-rezultate element="cadran_dreapta"  :evenimente="props.evenimente" />
+            <widget-rezultate element="bara"  :evenimente="props.evenimente" />
+        </div>
+        </div>
 
-         </div> -->
-
-   <widget-rezultate element="cadran_sus"  :evenimente="props.evenimente" />
-   <widget-rezultate element="cadran_stanga"  :evenimente="props.evenimente" />
-   <widget-rezultate element="cadran_dreapta"  :evenimente="props.evenimente" />
-   <widget-rezultate element="bara"  :evenimente="props.evenimente" />
-    </div>
-
+</div>
 </template>
