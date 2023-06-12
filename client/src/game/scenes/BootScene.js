@@ -60,8 +60,8 @@ export default class BootScene extends Scene {
    console.log(this.candidat.numecandidat)
     //this.scene.run('PlayScene')
     this.scene.add('cadrane',Cadrane,true,{
-      durataRepriza:12000,
-      durataAntrenament:12000,
+      durataRepriza:120000,
+      durataAntrenament:60000,
       instructiuni:[{
         text:'Priviti ecranul, observati existenta unor cadrane care au pe margine zone mai inchise la culoare. Intre cadrane se afla o banda albastra'
       },
@@ -85,7 +85,7 @@ export default class BootScene extends Scene {
         razaMare:180,
         razaMica:140,
         segmente:[{start:40,stop:70},{start:113,stop:143},{start:170,stop:200},{start:235,stop:270},{start:280,stop:290},{start:330,stop:12}],
-        viteza:0.01
+        viteza:0.0033
       },
       {
         nume:'cadran_stinga',
@@ -94,7 +94,7 @@ export default class BootScene extends Scene {
         razaMare:180,
         razaMica:140,
         segmente:[{start:0,stop:90},{start:165,stop:212},{start:250,stop:290}],
-        viteza:-0.008
+        viteza:-0.0033
       },
       {
         nume:'cadran_dreapta',
@@ -103,14 +103,14 @@ export default class BootScene extends Scene {
         razaMare:180,
         razaMica:140,
         segmente:[{start:20,stop:45},{start:75,stop:155},{start:210,stop:280},{start:330,stop:360}],
-        viteza:-0.006
+        viteza:-0.0033
       }],
       bara:{
         x:620,
         y:720,
         scalare:7,
-        durata:2000,
-        pauza:4000
+        durata:3000,
+        pauza:7000
       }
     }
     )
