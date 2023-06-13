@@ -23,10 +23,11 @@ let functii:any[]=[]
 const state=reactive({
   categorii:[],
   functii:[],
-  candidati:[]
+  candidati:[],
+  tipuri_examen:['AAA','BBB','CCC']
 })
 const host=import.meta.env.VITE_HOST
-
+let tip_examen=ref(null)
 axios.get(host+'candidati/toatecategoriile').then(
   res=>{
     // console.log('toate categoriile',res.data)
@@ -117,6 +118,10 @@ function adaugaCandidat(cuPrezentare=false){
   })
 
 }
+function adaugaTipExamenNou(val,done){
+   console.log(val)
+   done(val, 'add')
+}
 
 function reset(){
   nume.value = ''
@@ -175,7 +180,7 @@ const columns = [
 
             <q-tab-panels v-model="tab" animated>
               <q-tab-panel name="nou">
-                <q-card class="q-ma-md q-pa-md no-border-radius" style="width:900px">
+                <q-card class="q-ma-md q-pa-md no-border-radius" >
                       <div class="row q-gutter-md q-pa-md" >
                         <q-input v-model="nume" class="col " label="Nume candidat" style="width:200px;"/>
                         <q-input v-model="initiala" class="col " label="I.T." style="max-width:30px;"/>
@@ -198,7 +203,7 @@ const columns = [
                       </div>
                       </q-card>
                     
-                      <q-card class="q-ma-md q-pa-md no-border-radius" style="width:900px">
+                      <q-card class="q-ma-md q-pa-md no-border-radius" >
                         <div class="row q-gutter-md q-pa-md" >
                         <q-input v-model="numardosar" class="col " label="Numar dosar" style="width:200px;"/>
                         <q-select v-model="sex" :options="optiunisex" class="col " label="SEX" style="max-width:100px;"/>
@@ -211,7 +216,21 @@ const columns = [
                       <q-card class="q-ma-md q-pa-xs border-radius ">
                         <q-card-section>
                             <div class="flex flex-center q-pa-xs" >
-                                <q-btn class="q-mr-xl" color="primary" icon="mail" label="ADAUGA CANDIDAT!" @click="adaugaCandidat"/>
+                                <!-- <q-btn class="q-mr-xl" color="primary" icon="mail" label="ADAUGA CANDIDAT!" @click="adaugaCandidat"/> -->
+                                <div class="q-pa-md">
+                                  <q-select
+                                    label="Tip examen"
+                                    filled
+                                    v-model="tip_examen"
+                                    use-input
+                                    use-chips
+                                   
+                                    :options="state.tipuri_examen"
+                                    input-debounce="0"
+                                    @new-value="adaugaTipExamenNou"
+                                    style="width: 250px"
+                                  ></q-select>
+                                </div>
                                 <q-btn class="q-mr-xl" color="primary" icon="mail" label="ADAUGA CANDIDAT + PREZENTARE" @click="adaugaCandidat(true)"/>
                                 <q-btn color="primary" icon="mail" label="Reset" @click="reset"/>
                             </div>
