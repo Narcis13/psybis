@@ -203,8 +203,8 @@ const columns = [
                         <q-input v-model="numardosar" class="col " label="Numar dosar" style="width:200px;"/>
                         <q-select v-model="sex" :options="optiunisex" class="col " label="SEX" style="max-width:100px;"/>
                         <q-select  v-model="categorie" :options="state.categorii" class="col " label="Categorie" style="width:200px;"/>
-                        <q-select v-model="functie" :options="state.functii" class="col " label="Functie" style="width:200px;"/>
-                        <q-input v-model="angajator" class="col " label="Angajator" style="width:200px;"/>
+                        <q-select v-model="functie" :options="state.functii" class="col " label="Functie" style="width:400px;"/>
+                        <!-- <q-input v-model="angajator" class="col " label="Angajator" style="width:200px;"/> -->
                       </div>
                       </q-card>
                     
