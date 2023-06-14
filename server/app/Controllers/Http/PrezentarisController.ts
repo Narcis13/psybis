@@ -19,6 +19,13 @@ export default class PrezentarisController {
         return {prezentarile}
     }
 
+    public async toateTipurileDeExamene(){
+
+        const tipuriExamene = await Database.from('tipuri_examinari').select('*')
+
+        return {tipuriExamene}
+    }
+
     public async alocareteste({request}:HttpContextContract){
 
        

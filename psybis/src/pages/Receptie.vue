@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref,reactive} from 'vue'
+import {ref,reactive,computed} from 'vue'
 import axios from 'axios'
 import { useQuasar } from 'quasar'
 
@@ -24,7 +24,7 @@ const state=reactive({
   categorii:[],
   functii:[],
   candidati:[],
-  tipuri_examen:['AAA','BBB','CCC']
+  tipuri_examen:[]
 })
 const host=import.meta.env.VITE_HOST
 let tip_examen=ref(null)
@@ -43,6 +43,10 @@ axios.get(host+'candidati/toatecategoriile').then(
   console.log(err)
 })
 
+const tipExamenSelectat = computed(()=>{
+  return tip_examen.value!==null
+})
+
 axios.get(host+'candidati/toatefunctiile').then(
   res=>{
    //  console.log('toate categoriile',res.data)
@@ -57,6 +61,23 @@ axios.get(host+'candidati/toatefunctiile').then(
 ).catch(err=>{
   console.log(err)
 })
+
+
+axios.get(host+'prezentari/tipuriexamene').then(
+  res=>{
+    //console.log('toate tipurile de examene',res.data)
+    state.tipuri_examen=[]
+    res.data.tipuriExamene.map(t=>{
+       state.tipuri_examen.push({
+        value:t.id,
+        label:t.denumire
+       })
+    })
+  }
+).catch(err=>{
+  console.log(err)
+})
+
 
 function ultimiiCandidati(){
   state.candidati=[]
@@ -231,7 +252,7 @@ const columns = [
                                     style="width: 250px"
                                   ></q-select>
                                 </div>
-                                <q-btn class="q-mr-xl" color="primary" icon="mail" label="ADAUGA CANDIDAT + PREZENTARE" @click="adaugaCandidat(true)"/>
+                                <q-btn class="q-mr-xl" color="primary" icon="mail" :label="tipExamenSelectat?'Adauga candidat + prezentare':'Adauga candidat'" @click="adaugaCandidat(true)"/>
                                 <q-btn color="primary" icon="mail" label="Reset" @click="reset"/>
                             </div>
                         </q-card-section>
