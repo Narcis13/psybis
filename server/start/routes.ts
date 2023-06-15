@@ -32,6 +32,8 @@ Route.post('/logout','AuthController.logout')
 Route.get('candidati/toatecategoriile','CandidatsController.toatecategoriile')
 Route.get('candidati/toatefunctiile','CandidatsController.toatefunctiile')
 Route.post('candidati/candidatnou','CandidatsController.candidatnou')
+Route.post('candidati/tipexamennou','CandidatsController.tipExamenNou')
+
 Route.get('candidati/ultimii','CandidatsController.ultimiiCandidati')
 Route.get('prezentari/azi','PrezentarisController.prezentarileZilei')
 Route.get('prezentari/tipuriexamene','PrezentarisController.toateTipurileDeExamene')

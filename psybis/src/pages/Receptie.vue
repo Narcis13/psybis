@@ -108,7 +108,8 @@ function adaugaCandidat(cuPrezentare=false){
     idcategorie:categorie.value.value,
     angajator:angajator.value,
     coddosar:numardosar.value.length>3?numardosar.value:false,
-    cuPrezentare
+    cuPrezentare:tip_examen.value!==null,
+    id_tipexaminare:tip_examen.value!==null?tip_examen.value.value:0
   }
   console.log(candidat)
   axios.post(host+'candidati/candidatnou',candidat).then(
@@ -140,8 +141,18 @@ function adaugaCandidat(cuPrezentare=false){
 
 }
 function adaugaTipExamenNou(val,done){
-   console.log(val)
-   done(val, 'add')
+   
+   axios.post(host+'candidati/tipexamennou',{denumire:val}).then(
+    res=>{
+      console.log(res.data.tip[0])   
+      done({value:res.data.tip[0],label:val}, 'add')
+      //tip_examen.value.value=res.data.tip[0]
+      
+    }
+  ).catch(err=>{
+    console.log(err)
+  })
+  
 }
 
 function reset(){
@@ -154,7 +165,7 @@ function reset(){
  studii.value = 'Studii universitare'
  datanastere.value='1975/01/01'
  categorie.value=state.categorii.length>0?state.categorii[0]:null
-
+ tip_examen.value=null
  functie.value=state.functii.length>0?state.functii[0]:null
  }
  const  initialPagination = {
@@ -252,7 +263,7 @@ const columns = [
                                     style="width: 250px"
                                   ></q-select>
                                 </div>
-                                <q-btn class="q-mr-xl" color="primary" icon="mail" :label="tipExamenSelectat?'Adauga candidat + prezentare':'Adauga candidat'" @click="adaugaCandidat(true)"/>
+                                <q-btn class="q-mr-xl" color="primary" icon="mail" :label="tipExamenSelectat?'Adauga candidat + prezentare':'Adauga candidat'" @click="adaugaCandidat()"/>
                                 <q-btn color="primary" icon="mail" label="Reset" @click="reset"/>
                             </div>
                         </q-card-section>

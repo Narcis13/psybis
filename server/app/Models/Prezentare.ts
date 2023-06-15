@@ -9,6 +9,9 @@ export default class Prezentare extends BaseModel {
   public idCandidat:number
 
   @column()
+  public id_tipexaminare:number
+
+  @column()
   public dataprezentare:string
 
   @column()

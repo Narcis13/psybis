@@ -19,11 +19,19 @@ export default class CandidatsController {
          return functii;       
     }
 
+    public async tipExamenNou({request}:HttpContextContract){
+       const tip =  await Database.table('tipuri_examinari').insert(request.body())
+       return {tip}
+    }
+
     public async candidatnou({request}:HttpContextContract){
         //console.log(request.body())
      const date_candidat=request.body()
      const prezentare=date_candidat.cuPrezentare
+     const id_tipexaminare=date_candidat.id_tipexaminare
+
      delete date_candidat.cuPrezentare;
+     delete date_candidat.id_tipexaminare;
      if(!date_candidat.coddosar){
         date_candidat.coddosar=Math.floor(100000 + Math.random() * 900000)
      }
@@ -32,6 +40,7 @@ export default class CandidatsController {
      if(prezentare){
         const p = {
             idCandidat:candidat.id,
+            id_tipexaminare,
             dataprezentare:DateTime.now().toSQLDate()
         }
         await Prezentare.create(p)
