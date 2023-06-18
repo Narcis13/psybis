@@ -33,6 +33,7 @@ Route.get('candidati/toatecategoriile','CandidatsController.toatecategoriile')
 Route.get('candidati/toatefunctiile','CandidatsController.toatefunctiile')
 Route.post('candidati/candidatnou','CandidatsController.candidatnou')
 Route.post('candidati/tipexamennou','CandidatsController.tipExamenNou')
+Route.get('candidati/caut/:criteriu/:slug','CandidatsController.cautcandidat')
 
 Route.get('candidati/ultimii','CandidatsController.ultimiiCandidati')
 Route.get('prezentari/azi','PrezentarisController.prezentarileZilei')

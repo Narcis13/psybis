@@ -2,6 +2,7 @@
 import {ref,reactive,computed} from 'vue'
 import axios from 'axios'
 import { useQuasar } from 'quasar'
+import CautareCandidati from '@/components/CautareCandidati.vue'
 
 let tab= ref('nou')
 const $q = useQuasar()
@@ -27,6 +28,11 @@ const state=reactive({
   tipuri_examen:[]
 })
 const host=import.meta.env.VITE_HOST
+
+
+
+
+
 let tip_examen=ref(null)
 axios.get(host+'candidati/toatecategoriile').then(
   res=>{
@@ -284,8 +290,8 @@ const columns = [
               </q-tab-panel>
 
               <q-tab-panel name="cauta">
-                <div class="text-h6">Alarms</div>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                <cautare-candidati></cautare-candidati>
+               
               </q-tab-panel>
 
               

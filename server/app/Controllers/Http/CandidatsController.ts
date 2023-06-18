@@ -24,6 +24,24 @@ export default class CandidatsController {
        return {tip}
     }
 
+    public async cautcandidat({params}:HttpContextContract){
+      //console.log(params.criteriu,params.slug)
+      const criteriu = params.criteriu=='dosar'?'c.coddosar':'c.nume'
+      let sql=  `       
+      SELECT c.id,concat(nume,' ',initialatata,' ',prenume) as nume, coddosar as nrdosar, datanasterii as datanastere, f.denumire as functie ,c.stare 
+      FROM candidats c
+      inner join functii f on c.idfunctie=f.id
+      where ${criteriu} like '%${params.slug}%'
+      order by c.nume ASC
+      
+      `
+        const candidati=await Database
+        .rawQuery(sql)
+        
+        return {candidati}
+
+    }
+
     public async candidatnou({request}:HttpContextContract){
         //console.log(request.body())
      const date_candidat=request.body()
