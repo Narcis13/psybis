@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref} from 'vue'
+import {ref,computed} from 'vue'
 import axios from 'axios'
 
 const host=import.meta.env.VITE_HOST
@@ -8,6 +8,10 @@ let stringOptions = [
  
 ]
 const model = ref(null)
+
+let candidatselectat = computed(()=>{
+  return model.value?model.value:{label:'Candidat'}
+})
 const options = ref(stringOptions)
 
 function filterFn (val, update, abort) {
@@ -48,8 +52,16 @@ function filterFn (val, update, abort) {
         })
       }
 function     setModel (val) {
-   // console.log('set model',val)
-        model.value = val
+    console.log('set model',val,model.value)
+    options.value.map(o=>{
+      if(o.label==val) {
+          model.value={
+            value:o.value,
+            label:o.label
+          }
+      }
+    })
+       // model.value = val
       }
 
 /*                     */
@@ -83,15 +95,15 @@ function     setModel (val) {
                       </q-select>
                     </div>
 
-                    <q-card class="my-card">
+                    <q-card class="q-mt-xl my-card">
                         <q-card-section class="bg-purple text-white">
-                            <div class="text-h6">Our Changing Planet</div>
+                            <div class="text-h6">{{ candidatselectat.label }}</div>
                             <div class="text-subtitle2">by John Doe</div>
                         </q-card-section>
 
                         <q-card-actions align="around">
-                            <q-btn flat>Action 1</q-btn>
-                            <q-btn flat>Action 2</q-btn>
+                            <q-btn flat>Prezentare noua</q-btn>
+                            <q-btn flat>Istoric</q-btn>
                         </q-card-actions>
                         </q-card>
                 </div>
@@ -99,5 +111,5 @@ function     setModel (val) {
 <style lang="sass" scoped>
 .my-card
   width: 100%
-  max-width: 250px
+  max-width: 350px
 </style>
