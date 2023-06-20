@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref,computed} from 'vue'
+import {ref,computed,reactive} from 'vue'
 import axios from 'axios'
 
 const host=import.meta.env.VITE_HOST
@@ -8,9 +8,29 @@ let stringOptions = [
  
 ]
 const model = ref(null)
+let prompt=ref(false)
+const state=reactive({
+
+  tipuri_examen:[]
+})
+let tip_examen=ref(null)
+axios.get(host+'prezentari/tipuriexamene').then(
+  res=>{
+    //console.log('toate tipurile de examene',res.data)
+    state.tipuri_examen=[]
+    res.data.tipuriExamene.map(t=>{
+       state.tipuri_examen.push({
+        value:t.id,
+        label:t.denumire
+       })
+    })
+  }
+).catch(err=>{
+  console.log(err)
+})
 
 let candidatselectat = computed(()=>{
-  return model.value?model.value:{label:'Candidat'}
+  return model.value?model.value:{label:'Candidat',nrdosar:'',datanastere:''}
 })
 const options = ref(stringOptions)
 
@@ -37,7 +57,9 @@ function filterFn (val, update, abort) {
                                             {
                                                 label:c.nume,
                                                 value:c.id,
-                                                mask:val.charAt(0) >= '0' && val.charAt(0) <= '9'?''+c.nrdosar:c.nume
+                                                mask:val.charAt(0) >= '0' && val.charAt(0) <= '9'?''+c.nrdosar:c.nume,
+                                                nrdosar:c.nrdosar,
+                                                datanastere:c.datanastere
                                             }
                                             )
                                    })
@@ -57,7 +79,9 @@ function     setModel (val) {
       if(o.label==val) {
           model.value={
             value:o.value,
-            label:o.label
+            label:o.label,
+            nrdosar:o.nrdosar,
+            datanastere:o.datanastere
           }
       }
     })
@@ -73,6 +97,7 @@ function     setModel (val) {
                   <div class="q-gutter-md row">
                       <q-select
                         outstanding
+                        
                         :model-value="model"
                         use-input
                         hide-selected
@@ -98,14 +123,42 @@ function     setModel (val) {
                     <q-card class="q-mt-xl my-card">
                         <q-card-section class="bg-purple text-white">
                             <div class="text-h6">{{ candidatselectat.label }}</div>
-                            <div class="text-subtitle2">by John Doe</div>
+                            <div class="text-subtitle2">Nr. dosar: {{ candidatselectat.nrdosar }}</div>
+                            <div class="text-subtitle2">Data nastere: {{ candidatselectat.datanastere }}</div>
                         </q-card-section>
 
                         <q-card-actions align="around">
-                            <q-btn flat>Prezentare noua</q-btn>
+                            <q-btn flat @click="prompt=!prompt">Prezentare noua</q-btn>
                             <q-btn flat>Istoric</q-btn>
                         </q-card-actions>
                         </q-card>
+
+                        <q-dialog v-model="prompt" persistent>
+                              <q-card style="min-width: 350px">
+
+
+                                <q-card-section class="q-pt-none">
+                                  <div class="q-pa-md">
+                                      <q-select
+                                        label="Tip examen"
+                                        filled
+                                        v-model="tip_examen"
+
+                                      
+                                        :options="state.tipuri_examen"
+                                        input-debounce="0"
+                                      
+                                        style="width: 250px"
+                                      ></q-select>
+                                </div>
+                                </q-card-section>
+
+                                <q-card-actions align="right" class="text-primary">
+                                  <q-btn flat label="Abandon" v-close-popup />
+                                  <q-btn flat label="Adauga" v-close-popup />
+                                </q-card-actions>
+                              </q-card>
+                            </q-dialog>       
                 </div>
 </template>
 <style lang="sass" scoped>
