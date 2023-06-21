@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { DateTime } from 'luxon';
 import Database from '@ioc:Adonis/Lucid/Database';
+import Prezentare from 'App/Models/Prezentare';
 
 export default class PrezentarisController {
 
@@ -17,6 +18,21 @@ export default class PrezentarisController {
         .rawQuery(sql)
         
         return {prezentarile}
+    }
+
+    public async prezentareNoua({request}:HttpContextContract){
+       const data=request.body()
+        
+        
+                const p = {
+            idCandidat:data.idcandidat,
+            id_tipexaminare:data.idtipexamen,
+            dataprezentare:DateTime.now().toSQLDate()
+        }
+      const prezentare=  await Prezentare.create(p)
+        
+      return {prezentare}
+
     }
 
     public async toateTipurileDeExamene(){

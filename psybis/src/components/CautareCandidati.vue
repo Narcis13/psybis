@@ -3,6 +3,8 @@ import {ref,computed,reactive} from 'vue'
 import axios from 'axios'
 
 const host=import.meta.env.VITE_HOST
+
+
 /*     cautare candidati      */
 let stringOptions = [
  
@@ -31,6 +33,14 @@ axios.get(host+'prezentari/tipuriexamene').then(
 
 let candidatselectat = computed(()=>{
   return model.value?model.value:{label:'Candidat',nrdosar:'',datanastere:''}
+})
+
+let eCandidatSelectat = computed(()=>{
+  return model.value!==null
+})
+
+let eTipExamenSelectat = computed(()=>{
+  return tip_examen.value!==null
 })
 const options = ref(stringOptions)
 
@@ -90,6 +100,23 @@ function     setModel (val) {
 
 /*                     */
 
+function adaugPrezentare()
+{
+  let p={
+    idcandidat:model.value.value,
+    idtipexamen:tip_examen.value.value
+  }
+  console.log('adauag prezentare',p)
+
+  axios.post(host+'prezentari/prezentarenoua',p).then(
+    res=>{
+      prompt.value=false
+    }
+  ).catch(err=>{
+    console.log(err)
+  })
+}
+
 </script>
 
 <template>
@@ -128,7 +155,7 @@ function     setModel (val) {
                         </q-card-section>
 
                         <q-card-actions align="around">
-                            <q-btn flat @click="prompt=!prompt">Prezentare noua</q-btn>
+                            <q-btn :disable="!eCandidatSelectat" flat @click="prompt=!prompt">Prezentare noua</q-btn>
                             <q-btn flat>Istoric</q-btn>
                         </q-card-actions>
                         </q-card>
@@ -155,7 +182,7 @@ function     setModel (val) {
 
                                 <q-card-actions align="right" class="text-primary">
                                   <q-btn flat label="Abandon" v-close-popup />
-                                  <q-btn flat label="Adauga" v-close-popup />
+                                  <q-btn :disable="!eTipExamenSelectat" @click="adaugPrezentare" flat label="Adauga" v-close-popup />
                                 </q-card-actions>
                               </q-card>
                             </q-dialog>       
