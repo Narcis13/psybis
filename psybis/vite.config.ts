@@ -13,6 +13,7 @@ export default defineConfig({
     sassVariables: 'src/quasar-variables.sass'
   })
 ],
+base:'',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src')
