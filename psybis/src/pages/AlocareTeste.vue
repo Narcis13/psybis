@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 import { ref , reactive} from 'vue'
 import axios from 'axios'
 import {useUtilizatorStore} from '../stores/StoreUtilizator'

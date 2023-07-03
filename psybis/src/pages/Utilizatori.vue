@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 import Nomenclator from '../components/Nomenclator.vue'
 </script>
 

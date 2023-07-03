@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 import {ref} from 'vue'
 import {useConceptieTesteStore} from '../stores/StoreConceptieTeste'
 import AntetTest from '@/components/AntetTest.vue'

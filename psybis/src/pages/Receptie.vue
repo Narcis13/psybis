@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 import {ref,reactive,computed} from 'vue'
 import axios from 'axios'
 import { useQuasar } from 'quasar'
@@ -17,9 +17,9 @@ let prenume = ref('')
 let angajator = ref('')
 let numardosar=ref('')
 let categorie=ref(null)
-let categorii:any[]=[]
+let categorii=[]
 let functie=ref(null)
-let functii:any[]=[]
+let functii=[]
 
 const state=reactive({
   categorii:[],
@@ -37,7 +37,7 @@ let tip_examen=ref(null)
 axios.get(host+'candidati/toatecategoriile').then(
   res=>{
     // console.log('toate categoriile',res.data)
-     res.data.map((c:any)=>{
+     res.data.map((c)=>{
       state.categorii.push({
         label:c.denumire,
         value:c.id
@@ -56,7 +56,7 @@ const tipExamenSelectat = computed(()=>{
 axios.get(host+'candidati/toatefunctiile').then(
   res=>{
    //  console.log('toate categoriile',res.data)
-     res.data.map((f:any)=>{
+     res.data.map((f)=>{
       state.functii.push({
         label:f.denumire,
         value:f.id
