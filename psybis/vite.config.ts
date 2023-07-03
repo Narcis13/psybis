@@ -13,7 +13,7 @@ export default defineConfig({
     sassVariables: 'src/quasar-variables.sass'
   })
 ],
-base:'',
+base:'psybis/dist/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src')
