@@ -22,6 +22,9 @@
                             <q-btn to="alocareteste" class="full-width q-ma-xs" color="indigo"  no-caps>
                                 Alocare<br>Teste
                             </q-btn>
+                            <q-btn to="monitorizare" class="full-width q-ma-xs" color="indigo"  no-caps>
+                                Monitorizare<br>Statii
+                            </q-btn>
               
                         </q-card-section>
                         </q-card>

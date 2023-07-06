@@ -9,6 +9,7 @@ const routes = [
         { path: '/alocareteste', component: () => import('../pages/AlocareTeste.vue') },
         { path: '/utilizatori', component: () => import('../pages/Utilizatori.vue') },
         { path: '/studioconceptie', component: () => import('../pages/Conceptie.vue') },
+        { path: '/monitorizare', component: () => import('../pages/Monitorizare.vue') },
        
       ]
     },

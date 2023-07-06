@@ -11,6 +11,7 @@ rowsPerPage: 10
 }
 
 const host=import.meta.env.VITE_HOST
+let selected=ref([])
 const state = reactive(
  { 
   testedisponibile:[
@@ -210,7 +211,10 @@ const rows = [
                         :pagination="initialPagination"
                         :rows="state.alocariteste"
                         :columns="columns"
-                        row-key="name"
+                        row-key="id"
+                        v-model:selected="selected"
+                        selection="single"
+                    
                     >
 
                     <template v-slot:top>
@@ -222,7 +226,9 @@ const rows = [
                                         <q-tooltip class="bg-accent">Sterge</q-tooltip>
                                     </q-btn>
 
-
+                                    <q-btn   class="q-ma-sm"  round color="secondary" icon="print" >
+                                        <q-tooltip class="bg-accent">Print</q-tooltip>
+                                    </q-btn>
                                 
 
                                 </div>
