@@ -27,6 +27,7 @@
     "phaser": "^3.60.0",
     "pinia": "^2.0.35",
     "quasar": "^2.11.10",
+    "socket.io-client": "^4.7.1",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6"
   },

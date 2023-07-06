@@ -2,6 +2,7 @@
 import {ref} from 'vue'
 import { onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
+import io from 'socket.io-client'
 import type { Game } from 'phaser'
 import RezultateTest from './RezultateTest.vue'
 import {useCandidatStore} from '@/store/StoreCandidat'
@@ -12,9 +13,18 @@ let gameInstance: Game | null = null
 const containerId = 'game-container'
 const game = await import('@/game/game')
 const host=import.meta.env.VITE_HOST
+
 const candidat= useCandidatStore()
 let testinceput = ref(false)
 let idinvalid = ref(false)
+
+const socket = io(host)
+
+socket.on('start', (data) => {
+  console.log('Mesaj primit',data)
+})
+
+
 
 function resetTest(){
   candidat.poateFiResetat=!candidat.poateFiResetat
@@ -31,7 +41,7 @@ function cautaIdentificator(){
       candidat.initiereTest({numecandidat:res.data.testare[0][0].nume,numetest:res.data.testare[0][0].numetest})
       testinceput.value=true;
       identificator.value='';
-     
+      socket.emit('message',{mesaj:'TEST INITIAT',candidat:res.data.testare[0][0].nume})      
      }
      else {
        console.log('identificator invalid')

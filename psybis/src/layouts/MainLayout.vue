@@ -80,6 +80,7 @@
   <script>
   import { ref , defineComponent} from 'vue'
   import axios from 'axios'
+  import io from 'socket.io-client'
   import { useQuasar } from 'quasar'
   import {useUtilizatorStore} from '../stores/StoreUtilizator'
   import Meniu from '../components/Meniu.vue'
@@ -95,8 +96,14 @@
       const $q = useQuasar()
       const nume=ref("")
       const password=ref("")
-      console.log(UtilizatorStore.rol,$q)
+     
       const host=import.meta.env.VITE_HOST
+      console.log(host)
+      const socket = io(host)
+
+      socket.on('start', (data) => {
+        console.log('Mesaj primit',data)
+      })
       const autentificare = ()=>{
         //console.log(nume.value)
         //UtilizatorStore.autentificare(nume.value,password.value)
@@ -114,7 +121,9 @@
                                   color:'positive'
                                 }) 
                                 UtilizatorStore.autentificare(res.data.loggeduser,res.data.token)
-                  
+                                socket.on('message', (data) => {
+                                    console.log('Mesaj primit',data)
+                                  })
                         }
                         else
                         {
