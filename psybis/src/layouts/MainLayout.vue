@@ -83,6 +83,7 @@
   import io from 'socket.io-client'
   import { useQuasar } from 'quasar'
   import {useUtilizatorStore} from '../stores/StoreUtilizator'
+  import {useMonitorizareStatiiStore} from '../stores/StoreMonitorizareStatii'
   import Meniu from '../components/Meniu.vue'
   export default defineComponent({
   name: 'MainLayout',
@@ -93,6 +94,7 @@
     setup () {
       const leftDrawerOpen = ref(false)
       const UtilizatorStore = useUtilizatorStore()
+      const Monitorizare = useMonitorizareStatiiStore()
       const $q = useQuasar()
       const nume=ref("")
       const password=ref("")
@@ -103,6 +105,7 @@
 
       socket.on('start', (data) => {
         console.log('Mesaj primit',data)
+ 
       })
       const autentificare = ()=>{
         //console.log(nume.value)
@@ -123,6 +126,10 @@
                                 UtilizatorStore.autentificare(res.data.loggeduser,res.data.token)
                                 socket.on('message', (data) => {
                                     console.log('Mesaj primit',data)
+                                    if(data.eveniment&&data.eveniment=='START TEST'){
+                                        Monitorizare.statieDevineActiva(data)
+                                    }
+
                                   })
                         }
                         else

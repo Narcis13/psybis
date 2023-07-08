@@ -4,6 +4,7 @@ export const useCandidatStore = defineStore('candidatStore',{
     state:()=>({
        numecandidat:'',
        numetest:'',
+       idStatie:0,
        testInceput:false,
        poateFiResetat:false,
        eResetat:false,
@@ -13,6 +14,7 @@ export const useCandidatStore = defineStore('candidatStore',{
         initiereTest(data){
             this.numecandidat=data.numecandidat
             this.numetest=data.numetest
+            this.idStatie=data.idStatie
             this.testInceput=true
             this.evenimenteTest=[]
         },
@@ -22,7 +24,7 @@ export const useCandidatStore = defineStore('candidatStore',{
             this.testInceput=false
             this.numecandidat=''
             this.numetest=''
-            
+            // aici vin cu un req /finalizaretest/:ids ca sa propag evenimentul finalizare test...
         },
         resetareTest(){
             this.poateFiResetat=false

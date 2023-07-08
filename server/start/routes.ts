@@ -41,4 +41,4 @@ Route.get('prezentari/tipuriexamene','PrezentarisController.toateTipurileDeExame
 Route.post('prezentari/prezentarenoua','PrezentarisController.prezentareNoua')
 Route.post('prezentari/alocareteste','PrezentarisController.alocareteste')
 Route.get('testari/azi','TestarisController.testarilezilei')
-Route.get('testari/:id','TestarisController.unidentificator')
+Route.get('testari/:id/:ids','TestarisController.unidentificator')

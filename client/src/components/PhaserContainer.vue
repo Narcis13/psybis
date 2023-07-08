@@ -8,7 +8,14 @@ import RezultateTest from './RezultateTest.vue'
 import {useCandidatStore} from '@/store/StoreCandidat'
 import eventsCenter from '../game/scenes/EventsCenter.js'
 
+const queryString = window.location.search;
 
+let idStatie=0
+if(queryString){
+  const urlParams = new URLSearchParams(queryString);
+  idStatie = urlParams.get('sid')
+}
+//console.log(idStatie)
 let gameInstance: Game | null = null
 const containerId = 'game-container'
 const game = await import('@/game/game')
@@ -34,11 +41,11 @@ function resetTest(){
 
 function cautaIdentificator(){
 
-  axios.get(host+'testari/'+identificator.value).then(
+  axios.get(host+'testari/'+identificator.value+'/'+idStatie).then(
   res=>{
     
      if (res.data.testare[0].length>0){
-      candidat.initiereTest({numecandidat:res.data.testare[0][0].nume,numetest:res.data.testare[0][0].numetest})
+      candidat.initiereTest({numecandidat:res.data.testare[0][0].nume,numetest:res.data.testare[0][0].numetest,idStatie})
       testinceput.value=true;
       identificator.value='';
       socket.emit('message',{mesaj:'TEST INITIAT',candidat:res.data.testare[0][0].nume})      

@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { DateTime } from 'luxon';
 import Database from '@ioc:Adonis/Lucid/Database';
+import Ws from 'App/Services/Ws'
 
 export default class AlocarisController {
 
@@ -28,7 +29,8 @@ export default class AlocarisController {
             `
             const testare=await Database
             .rawQuery(sql)
-            
+            //console.log(testare)
+            Ws.io.emit('message', { eveniment:'START TEST',candidat: testare[0][0] , statie:params.ids})
             return {testare}
     }
 }
