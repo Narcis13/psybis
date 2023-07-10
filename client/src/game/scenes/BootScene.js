@@ -60,8 +60,8 @@ export default class BootScene extends Scene {
    console.log(this.candidat.numecandidat)
     //this.scene.run('PlayScene')
     this.scene.add('cadrane',Cadrane,true,{
-      durataRepriza:120000,
-      durataAntrenament:60000,
+      durataRepriza:30000,
+      durataAntrenament:30000,
       instructiuni:[{
         text:'Priviti ecranul, observati existenta unor cadrane care au pe margine zone mai inchise la culoare. Intre cadrane se afla o banda albastra'
       },

@@ -129,6 +129,9 @@
                                     if(data.eveniment&&data.eveniment=='START TEST'){
                                         Monitorizare.statieDevineActiva(data)
                                     }
+                                    if(data.eveniment&&data.eveniment=='STOP TEST'){
+                                        Monitorizare.statieDevineInactiva(data.statie)
+                                    }
 
                                   })
                         }

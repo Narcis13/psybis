@@ -33,4 +33,10 @@ export default class AlocarisController {
             Ws.io.emit('message', { eveniment:'START TEST',candidat: testare[0][0] , statie:params.ids})
             return {testare}
     }
+
+    public async finalizareTest({params}:HttpContextContract){
+        console.log('FINALIZARE TEST',params.ids)
+        Ws.io.emit('message', { eveniment:'STOP TEST' , statie:params.ids})
+        return {}
+    }
 }

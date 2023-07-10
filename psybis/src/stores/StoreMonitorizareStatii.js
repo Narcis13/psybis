@@ -12,8 +12,9 @@ export const useMonitorizareStatiiStore = defineStore('monitorizareStatiiStore',
           this.active.push({statie:payload})
          // console.log('introcu statii active',payload,this.active)
        },
-       statieDevineInactiva(){
-         console.log('inactivare statie')
+       statieDevineInactiva(ids){
+         console.log('inactivare statie',ids)
+        this.active=this.active.filter(statie=>statie.statie.statie!=ids)
        }
     }
 })
