@@ -2,6 +2,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { DateTime } from 'luxon';
 import Database from '@ioc:Adonis/Lucid/Database';
 import Ws from 'App/Services/Ws'
+import { HttpContext } from '@adonisjs/core/build/standalone';
 
 export default class AlocarisController {
 
@@ -35,8 +36,13 @@ export default class AlocarisController {
     }
 
     public async finalizareTest({params}:HttpContextContract){
-        console.log('FINALIZARE TEST',params.ids)
+       // console.log('FINALIZARE TEST',params.ids)
         Ws.io.emit('message', { eveniment:'STOP TEST' , statie:params.ids})
         return {}
     }
+
+    public async helpTest({params}:HttpContextContract){
+        Ws.io.emit('message', { eveniment:'HELP TEST' , statie:params.ids})
+        return {}
+    } 
 }

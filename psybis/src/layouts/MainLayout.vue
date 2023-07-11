@@ -73,7 +73,23 @@
           </q-toolbar-title>
         </q-toolbar>
       </q-footer>
-  
+
+      <q-dialog v-model="solicitare_ajutor" persistent transition-show="scale" transition-hide="scale">
+      <q-card class="bg-red text-white" style="width: 300px">
+        <q-card-section>
+          <div class="text-h6">Solicitare ajutor</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          Candidatul aflat la statia {{ id_statie_need_help }} are nevoie de ajutor!
+        </q-card-section>
+
+        <q-card-actions align="right" class="bg-white text-teal">
+          <q-btn flat label="OK" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
     </q-layout>
   </template>
   
@@ -98,7 +114,8 @@
       const $q = useQuasar()
       const nume=ref("")
       const password=ref("")
-     
+      let id_statie_need_help=ref("")
+       let solicitare_ajutor=ref(false)
       const host=import.meta.env.VITE_HOST
       console.log(host)
       const socket = io(host)
@@ -131,6 +148,10 @@
                                     }
                                     if(data.eveniment&&data.eveniment=='STOP TEST'){
                                         Monitorizare.statieDevineInactiva(data.statie)
+                                    }
+                                    if(data.eveniment&&data.eveniment=='HELP TEST'){
+                                       solicitare_ajutor.value=true;
+                                       id_statie_need_help.value=data.statie
                                     }
 
                                   })
@@ -165,6 +186,8 @@
         nume,
         password,
         autentificare,
+        solicitare_ajutor,
+        id_statie_need_help,
         UtilizatorStore,
         toggleLeftDrawer () {
           leftDrawerOpen.value = !leftDrawerOpen.value

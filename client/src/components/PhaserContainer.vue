@@ -63,6 +63,16 @@ function cautaIdentificator(){
   
 }
 
+function help(){
+  axios.post(host+'testari/help/'+idStatie,{}).then(
+                res=>{
+      
+                }
+              ).catch(err=>{
+                console.log(err)
+              })
+}
+
  let identificator=ref('')
 onMounted(() => {
   gameInstance = game.launch(containerId)
@@ -88,7 +98,7 @@ onUnmounted(() => {
   
       <template v-slot:action>
         <q-btn v-show="candidat.poateFiResetat" flat color="white" label="Reset" @click="resetTest"/>
-        <q-btn flat color="white" label="Solicita ajutor!" />
+        <q-btn flat color="white" label="Solicita ajutor!" @click="help"/>
       </template>
     </q-banner>
     <div v-show="!candidat.testInceput" class="flex flex-center" style="height:90vh;width:900px">
