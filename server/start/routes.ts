@@ -44,3 +44,5 @@ Route.get('testari/azi','TestarisController.testarilezilei')
 Route.get('testari/:id/:ids','TestarisController.unidentificator')
 Route.post('testari/finalizare/:ids','TestarisController.finalizareTest')
 Route.post('testari/help/:ids','TestarisController.helpTest')
+
+Route.get('conceptie/incarctest/:r','ConceptiesController.incarcaParametriiTest')

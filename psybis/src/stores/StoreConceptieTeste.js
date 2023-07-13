@@ -4,7 +4,19 @@ export const useConceptieTesteStore = defineStore('conceptieTesteStore',{
 
 
     state:()=>({
-        colectieTeste:['Test ABCD', 'Test 1', 'Test 2', 'Test 3']
+        colectieTeste:[
+            {
+                id:1,
+                denumire:'Test RSD',
+                ruta:'rsd'
+
+            },
+            {
+                id:2,
+                denumire:'Test 1',
+                ruta:'test1'
+            }
+        ]
     }),
     actions:{
 
