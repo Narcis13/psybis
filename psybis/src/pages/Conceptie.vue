@@ -70,7 +70,7 @@ function editeazaTest(ruta){
    console.log('editez test',ruta)
    axios.get(host+'conceptie/incarctest/'+ruta).then(
         res=>{
-            // console.log('toate categoriile',res.data)
+             console.log('continut',JSON.parse(res.data.continut))
            
         }
             ).catch(err=>{

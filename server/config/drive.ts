@@ -53,7 +53,8 @@ export default driveConfig({
       | files.
       |
       */
-      root: Application.tmpPath('uploads'),
+      //root: Application.tmpPath('uploads'),
+      root: './public/',
 
       /*
       |--------------------------------------------------------------------------
@@ -77,7 +78,7 @@ export default driveConfig({
       | you are not registering routes with this prefix.
       |
       */
-      basePath: '/uploads',
+      basePath: '/public',
     },
 
     /*
