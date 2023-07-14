@@ -9,6 +9,7 @@ const conceptieStore = useConceptieTesteStore()
 console.log('Store conceptie teste', conceptieStore.colectieTeste)
 const host=import.meta.env.VITE_HOST
 let tab=ref('design')
+let editor=ref('')
 //let tabantet=ref('mails')
 let splitterModel=ref(30)
 let selected= ref('Food')
@@ -71,7 +72,7 @@ function editeazaTest(ruta){
    axios.get(host+'conceptie/incarctest/'+ruta).then(
         res=>{
              console.log('continut',JSON.parse(res.data.continut))
-           
+           editor.value=res.data.continut
         }
             ).catch(err=>{
             console.log(err)
@@ -180,7 +181,7 @@ function editeazaTest(ruta){
 
                                     <template v-slot:after>
                                         <div>
-
+                                            <q-editor v-model="editor" min-height="15rem" />
 
                                         </div>
                                     </template>
