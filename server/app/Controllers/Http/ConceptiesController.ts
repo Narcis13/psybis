@@ -9,4 +9,10 @@ export default class ConceptiesController {
     // console.log('incarc parametrii test ',params.r,contents.toString('utf8'))
       return {continut:contents.toString('utf8')}
     }
+
+    public async salveazaParametriiTest({request}:HttpContextContract){
+     //console.log(request.body())
+      await Drive.put('./rsd.json', request.body().continut)
+      return {mesaj:'Parametrii au fost salvati cu succes!'}
+    }
 }

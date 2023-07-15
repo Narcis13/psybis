@@ -1,6 +1,7 @@
 <script setup >
 import {ref} from 'vue'
 import axios from 'axios'
+import { useQuasar } from 'quasar'
 import {useConceptieTesteStore} from '../stores/StoreConceptieTeste'
 import AntetTest from '@/components/AntetTest.vue'
 import Game from '@/components/Game.vue'
@@ -10,6 +11,7 @@ console.log('Store conceptie teste', conceptieStore.colectieTeste)
 const host=import.meta.env.VITE_HOST
 let tab=ref('design')
 let editor=ref('')
+const $q = useQuasar()
 //let tabantet=ref('mails')
 let splitterModel=ref(30)
 let selected= ref('Food')
@@ -67,6 +69,25 @@ const barStyle= {
         width: '9px',
         opacity: 0.2
       }
+
+function saveWork(){
+   console.log('salvez',editor.value)
+
+   axios.post(host+'conceptie/salveztest',{continut:editor.value}).then(
+    res=>{
+        $q.notify({
+          message: res.data.mesaj,
+          color: 'green-4',
+          textColor: 'white',
+          icon: 'cloud_done'
+        })
+    }
+  ).catch(err=>{
+    console.log(err)
+  })
+
+}
+
 function editeazaTest(ruta){
    console.log('editez test',ruta)
    axios.get(host+'conceptie/incarctest/'+ruta).then(
@@ -86,7 +107,7 @@ function editeazaTest(ruta){
         <div class="row shadow-2 justify-around no-wrap" style="width:80vw;">  
 
                 <div class="col-auto align-center">
-                    <div class="flex flex-column column q-pa-md" style="width:1360px;">
+                    <div class="flex flex-column column q-pa-md" style="width:1540px;">
 
                         <q-card style="height:80vh;" class="justify-center">
                             <q-tabs
@@ -180,8 +201,39 @@ function editeazaTest(ruta){
                                     </template>
 
                                     <template v-slot:after>
-                                        <div>
-                                            <q-editor v-model="editor" min-height="15rem" />
+                                        <div class="q-ma-sm q-pa-md">
+                                            <q-toolbar class="bg-primary glossy text-white" style="max-width: 1120px">
+
+
+                                                    <q-toolbar-title>Parametrii test</q-toolbar-title>
+
+                                                        <q-btn flat round dense icon="save" @click="saveWork"/>
+                                            </q-toolbar>
+                                            <div class="q-pa-md" style="max-width: 1120px">
+                                                        <q-input
+                                                        v-model="editor"
+                                                       
+                                                        autogrow
+                                                        />
+                                                    </div>
+
+
+                                            <!-- <q-editor 
+                                                v-model="editor" 
+                                                min-height="15rem"
+                                                  :definitions="{
+                                                    save: {
+                                                    tip: 'Salveaza modificarile',
+                                                    icon: 'save',
+                                                    label: 'Salveaza',
+                                                    handler: saveWork
+                                                    }
+                                                }"
+                                                :toolbar="[
+                                                
+                                                    ['save']
+                                                ]"
+                                             /> -->
 
                                         </div>
                                     </template>
